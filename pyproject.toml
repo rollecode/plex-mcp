@@ -1,0 +1,44 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "plex-mcp"
+version = "1.0.0"
+description = "MCP server for Plex, every API operation"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.12"
+keywords = ["plex", "mcp", "plex", "media", "model-context-protocol"]
+
+dependencies = [
+    # <2 until the MCPServer migration: 2.x moved mcp.server.fastmcp
+    "mcp>=1.29.0,<2",
+    "httpx[socks]>=0.27.0",
+    "python-dotenv>=1.0.0",
+    "uvicorn>=0.30.0",
+]
+
+[project.scripts]
+plex-mcp = "plex_mcp.runtime:main"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.8.0",
+    "pytest>=8.0.0",
+    # Only scripts/convert_spec.py needs it; the server reads the JSON.
+    "pyyaml>=6.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/plex_mcp"]
+
+[tool.ruff]
+target-version = "py312"
+
+[tool.ruff.lint.per-file-ignores]
+# Tools have to hand every failure back as a structured error string; an
+# exception escaping into the stdio stream kills the session.
+"src/plex_mcp/runtime.py" = ["BLE001"]
+# Generated: one function per API operation, long lines and all.
+"src/plex_mcp/tools.py" = ["E501"]
