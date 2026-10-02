@@ -11,6 +11,8 @@ import httpx
 from mcp.server.fastmcp import FastMCP
 from mcp.types import Icon
 
+from . import paging
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -76,6 +78,7 @@ mcp = FastMCP(
 )
 
 mcp._mcp_server.version = __version__
+paging.register(mcp)
 
 _READ = {
     "readOnlyHint": True,
@@ -189,12 +192,10 @@ def call(
         if not response.content:
             return json.dumps({"status": "success", "result": None})
         try:
-            return json.dumps(
-                {"status": "success", "result": response.json()}, indent=2
-            )
+            return paging.shape(response.json())
         except ValueError:
             # Some endpoints ignore the Accept header and answer in XML.
-            return json.dumps({"status": "success", "result": response.text})
+            return paging.shape(response.text)
     except Exception as e:
         return _err(e)
 

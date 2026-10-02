@@ -94,4 +94,4 @@ def test_every_tool_registers():
 
     from plex_mcp import tools  # noqa: F401 -- registers the tools
 
-    assert len(asyncio.run(runtime.mcp.list_tools())) == 405
+    assert len(asyncio.run(runtime.mcp.list_tools())) == 406
