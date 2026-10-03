@@ -66,9 +66,10 @@ mcp = FastMCP(
     instructions=(
         "Manage a Plex Media Server: libraries and their contents, playlists, "
         "collections, hubs, search, sessions and playback, transcoding, "
-        "watchlists, users and server settings. Every operation is a tool, "
+        "watchlists, users and server settings. Everyday operations are tools, "
         "named verb-first: list_* and get_* read, create_*, update_* and "
-        "delete_* change. "
+        "delete_* change. The other operations of the 405 are reached with "
+        "find_operation, which searches them, and run_operation. "
         "Start with list_library_sections to get a section key, then "
         "list_library_sections_by_section_key_all to browse it. Ratings keys "
         "identify items. Tools whose path starts with a plex.tv host act on "
@@ -93,6 +94,20 @@ _WRITE = {
     "openWorldHint": True,
 }
 _DESTRUCTIVE = {**_WRITE, "destructiveHint": True}
+
+OPERATIONS: dict = {}
+"""Every generated API operation by name, with its annotations. Only the
+catalog's core subset is registered as tools; the rest run through it."""
+
+
+def operation(annotations: dict):
+    """Record a generated function as an operation without exposing it as a tool."""
+
+    def record(fn):
+        OPERATIONS[fn.__name__] = (fn, annotations)
+        return fn
+
+    return record
 
 _clients: dict[str, httpx.Client] = {}
 
@@ -205,7 +220,7 @@ def main() -> None:
 
     from dotenv import find_dotenv, load_dotenv
 
-    from . import tools  # noqa: F401 -- importing registers every tool
+    from . import catalog  # noqa: F401 -- importing registers the tools
 
     dotenv_path = find_dotenv(usecwd=True)
     if dotenv_path and load_dotenv(dotenv_path, override=False):

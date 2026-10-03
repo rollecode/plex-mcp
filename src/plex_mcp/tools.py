@@ -4,13 +4,13 @@ Regenerate with:
 
     python scripts/generate_tools.py openapi.json src/plex_mcp/tools.py
 
-One tool per operation, 405 of them, covering the whole API.
+One function per operation, 405 of them, covering the whole API. catalog.py
+exposes a core set as tools and runs the rest by name.
 """
 
-from .runtime import _DESTRUCTIVE, _READ, _WRITE, call, mcp
+from .runtime import _DESTRUCTIVE, _READ, _WRITE, call, operation
 
-
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_actions_add_to_watchlist(uri: str | None = None) -> str:
     """Add to Watchlist.
 
@@ -22,7 +22,7 @@ def create_actions_add_to_watchlist(uri: str | None = None) -> str:
     return call("POST", "/actions/addToWatchlist", query={"uri": uri}, body=None, form=None, host='https://discover.provider.plex.tv')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_actions_remove_from_watchlist(uri: str | None = None) -> str:
     """Remove from Watchlist.
 
@@ -34,7 +34,7 @@ def create_actions_remove_from_watchlist(uri: str | None = None) -> str:
     return call("POST", "/actions/removeFromWatchlist", query={"uri": uri}, body=None, form=None, host='https://discover.provider.plex.tv')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_auth_jwk(body: dict) -> str:
     """Register Device JWK.
 
@@ -46,7 +46,7 @@ def create_auth_jwk(body: dict) -> str:
     return call("POST", "/auth/jwk", query=None, body=body, form=None, host='https://clients.plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_auth_token(body: dict) -> str:
     """Exchange JWT Token.
 
@@ -58,7 +58,7 @@ def create_auth_token(body: dict) -> str:
     return call("POST", "/auth/token", query=None, body=body, form=None, host='https://clients.plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_butler() -> str:
     """Start all Butler tasks.
 
@@ -67,7 +67,7 @@ def create_butler() -> str:
     return call("POST", "/butler", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_butler_by_butler_task(butler_task: str) -> str:
     """Start a single Butler task.
 
@@ -79,7 +79,7 @@ def create_butler_by_butler_task(butler_task: str) -> str:
     return call("POST", f"/butler/{butler_task}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_by_transcode_type_transcode_universal_fallback(transcode_type: str) -> str:
     """Manually trigger a transcoder fallback.
 
@@ -91,7 +91,7 @@ def create_by_transcode_type_transcode_universal_fallback(transcode_type: str) -
     return call("POST", f"/{transcode_type}/:/transcode/universal/fallback", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_download_queue() -> str:
     """Create download queue.
 
@@ -100,7 +100,7 @@ def create_download_queue() -> str:
     return call("POST", "/downloadQueue", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_download_queue_by_queue_id_add(queue_id: int, keys: list | None = None) -> str:
     """Add to download queue.
 
@@ -113,7 +113,7 @@ def create_download_queue_by_queue_id_add(queue_id: int, keys: list | None = Non
     return call("POST", f"/downloadQueue/{queue_id}/add", query={"keys": keys}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_download_queue_by_queue_id_items_by_item_id_restart(queue_id: int, item_id: list) -> str:
     """Restart processing of items from the decision.
 
@@ -126,7 +126,7 @@ def create_download_queue_by_queue_id_items_by_item_id_restart(queue_id: int, it
     return call("POST", f"/downloadQueue/{queue_id}/items/{item_id}/restart", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_home_users() -> str:
     """Create Home User.
 
@@ -135,7 +135,7 @@ def create_home_users() -> str:
     return call("POST", "/home/users", query=None, body=None, form=None, host='https://plex.tv/api')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_home_users_by_id_switch(id: int) -> str:
     """Switch Home User.
 
@@ -147,7 +147,7 @@ def create_home_users_by_id_switch(id: int) -> str:
     return call("POST", f"/home/users/{id}/switch", query=None, body=None, form=None, host='https://plex.tv/api')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_hubs_sections_by_section_id_manage(section_id: int, metadata_item_id: int | None = None, promoted_to_recommended: str | None = None, promoted_to_own_home: str | None = None, promoted_to_shared_home: str | None = None) -> str:
     """Create a custom hub.
 
@@ -163,7 +163,7 @@ def create_hubs_sections_by_section_id_manage(section_id: int, metadata_item_id:
     return call("POST", f"/hubs/sections/{section_id}/manage", query={"metadataItemId": metadata_item_id, "promotedToRecommended": promoted_to_recommended, "promotedToOwnHome": promoted_to_own_home, "promotedToSharedHome": promoted_to_shared_home}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_library_collections(section_id: str | None = None, uri: str | None = None) -> str:
     """Create collection.
 
@@ -176,7 +176,7 @@ def create_library_collections(section_id: str | None = None, uri: str | None = 
     return call("POST", "/library/collections", query={"sectionId": section_id, "uri": uri}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_library_file(url: str | None = None, virtual_file_path: str | None = None, compute_hashes: str | None = None, ingest_non_matches: str | None = None) -> str:
     """Ingest a transient item.
 
@@ -191,7 +191,7 @@ def create_library_file(url: str | None = None, virtual_file_path: str | None = 
     return call("POST", "/library/file", query={"url": url, "virtualFilePath": virtual_file_path, "computeHashes": compute_hashes, "ingestNonMatches": ingest_non_matches}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_library_metadata_by_id_arts(id: int, body: dict) -> str:
     """Upload media art Art.
 
@@ -204,7 +204,7 @@ def create_library_metadata_by_id_arts(id: int, body: dict) -> str:
     return call("POST", f"/library/metadata/{id}/arts", query=None, body=body, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_library_metadata_by_id_posters(id: int, body: dict) -> str:
     """Upload media art Poster.
 
@@ -217,7 +217,7 @@ def create_library_metadata_by_id_posters(id: int, body: dict) -> str:
     return call("POST", f"/library/metadata/{id}/posters", query=None, body=body, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_library_metadata_by_ids_by_element(ids: str, element: str, url: str | None = None) -> str:
     """Set an item's artwork, theme, etc.
 
@@ -231,7 +231,7 @@ def create_library_metadata_by_ids_by_element(ids: str, element: str, url: str |
     return call("POST", f"/library/metadata/{ids}/{element}", query={"url": url}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_library_metadata_by_ids_extras(ids: str, extra_type: int | None = None, url: str | None = None) -> str:
     """Add to an item's extras.
 
@@ -245,7 +245,7 @@ def create_library_metadata_by_ids_extras(ids: str, extra_type: int | None = Non
     return call("POST", f"/library/metadata/{ids}/extras", query={"extraType": extra_type, "url": url}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_library_metadata_by_ids_marker(ids: str, type: int | None = None, start_time_offset: int | None = None, end_time_offset: int | None = None, attributes: dict | None = None) -> str:
     """Create a marker.
 
@@ -261,7 +261,7 @@ def create_library_metadata_by_ids_marker(ids: str, type: int | None = None, sta
     return call("POST", f"/library/metadata/{ids}/marker", query={"type": type, "startTimeOffset": start_time_offset, "endTimeOffset": end_time_offset, "attributes": attributes}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_library_optimize() -> str:
     """Optimize Library.
 
@@ -270,7 +270,7 @@ def create_library_optimize() -> str:
     return call("POST", "/library/optimize", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_library_sections_all(name: str | None = None, type: int | None = None, scanner: str | None = None, agent: str | None = None, metadata_agent_provider_group_id: str | None = None, language: str | None = None, locations: list | None = None, prefs: dict | None = None, relative: str | None = None, import_fromi_tunes: str | None = None) -> str:
     """Add a library section.
 
@@ -291,7 +291,7 @@ def create_library_sections_all(name: str | None = None, type: int | None = None
     return call("POST", "/library/sections/all", query={"name": name, "type": type, "scanner": scanner, "agent": agent, "metadataAgentProviderGroupId": metadata_agent_provider_group_id, "language": language, "locations": locations, "prefs": prefs, "relative": relative, "importFromiTunes": import_fromi_tunes}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_library_sections_by_section_id_empty_trash(section_id: int) -> str:
     """Empty Trash.
 
@@ -303,7 +303,7 @@ def create_library_sections_by_section_id_empty_trash(section_id: int) -> str:
     return call("POST", f"/library/sections/{section_id}/emptyTrash", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_library_sections_by_section_id_optimize(section_id: int) -> str:
     """Optimize Section.
 
@@ -315,7 +315,7 @@ def create_library_sections_by_section_id_optimize(section_id: int) -> str:
     return call("POST", f"/library/sections/{section_id}/optimize", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_library_sections_by_section_id_refresh(section_id: int, force: str | None = None, path: str | None = None) -> str:
     """Refresh Section.
 
@@ -329,7 +329,7 @@ def create_library_sections_by_section_id_refresh(section_id: int, force: str | 
     return call("POST", f"/library/sections/{section_id}/refresh", query={"force": force, "path": path}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_library_sections_refresh(force: bool | None = None) -> str:
     """Refresh all sections.
 
@@ -341,7 +341,7 @@ def create_library_sections_refresh(force: bool | None = None) -> str:
     return call("POST", "/library/sections/refresh", query={"force": force}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_livetv_dvrs(lineup: str | None = None, device: list | None = None, language: str | None = None) -> str:
     """Create a DVR.
 
@@ -355,7 +355,7 @@ def create_livetv_dvrs(lineup: str | None = None, device: list | None = None, la
     return call("POST", "/livetv/dvrs", query={"lineup": lineup, "device": device, "language": language}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_livetv_dvrs_by_dvr_id_channels_by_channel_tune(dvr_id: int, channel: str) -> str:
     """Tune a channel on a DVR.
 
@@ -368,7 +368,7 @@ def create_livetv_dvrs_by_dvr_id_channels_by_channel_tune(dvr_id: int, channel: 
     return call("POST", f"/livetv/dvrs/{dvr_id}/channels/{channel}/tune", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_livetv_dvrs_by_dvr_id_reload_guide(dvr_id: int) -> str:
     """Tell a DVR to reload program guide.
 
@@ -380,7 +380,7 @@ def create_livetv_dvrs_by_dvr_id_reload_guide(dvr_id: int) -> str:
     return call("POST", f"/livetv/dvrs/{dvr_id}/reloadGuide", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_log(body: dict) -> str:
     """Logging a multi-line message to the Plex Media Server log.
 
@@ -392,7 +392,7 @@ def create_log(body: dict) -> str:
     return call("POST", "/log", query=None, body=body, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_log_networked(minutes: int | None = None) -> str:
     """Enabling Papertrail.
 
@@ -404,7 +404,7 @@ def create_log_networked(minutes: int | None = None) -> str:
     return call("POST", "/log/networked", query={"minutes": minutes}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_media_grabbers_devices(uri: str | None = None) -> str:
     """Add a device.
 
@@ -416,7 +416,7 @@ def create_media_grabbers_devices(uri: str | None = None) -> str:
     return call("POST", "/media/grabbers/devices", query={"uri": uri}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_media_grabbers_devices_by_device_id_scan(device_id: int, source: str | None = None) -> str:
     """Tell a device to scan for channels.
 
@@ -429,7 +429,7 @@ def create_media_grabbers_devices_by_device_id_scan(device_id: int, source: str 
     return call("POST", f"/media/grabbers/devices/{device_id}/scan", query={"source": source}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_media_providers(url: str | None = None) -> str:
     """Add a media provider.
 
@@ -441,7 +441,7 @@ def create_media_providers(url: str | None = None) -> str:
     return call("POST", "/media/providers", query={"url": url}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_media_providers_refresh() -> str:
     """Refresh media providers.
 
@@ -450,7 +450,7 @@ def create_media_providers_refresh() -> str:
     return call("POST", "/media/providers/refresh", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_media_subscriptions(target_library_section_id: int | None = None, target_section_location_id: int | None = None, type: int | None = None, hints: dict | None = None, prefs: dict | None = None, params: dict | None = None) -> str:
     """Create a subscription.
 
@@ -469,7 +469,7 @@ def create_media_subscriptions(target_library_section_id: int | None = None, tar
     return call("POST", "/media/subscriptions", query={"targetLibrarySectionID": target_library_section_id, "targetSectionLocationID": target_section_location_id, "type": type, "hints": hints, "prefs": prefs, "params": params}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_media_subscriptions_process() -> str:
     """Process all subscriptions.
 
@@ -478,7 +478,7 @@ def create_media_subscriptions_process() -> str:
     return call("POST", "/media/subscriptions/process", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_myplex_claim() -> str:
     """Claim Server.
 
@@ -487,7 +487,7 @@ def create_myplex_claim() -> str:
     return call("POST", "/myplex/claim", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_pins() -> str:
     """Create OAuth PIN.
 
@@ -496,7 +496,7 @@ def create_pins() -> str:
     return call("POST", "/pins", query=None, body=None, form=None, host='https://plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_pins_xml() -> str:
     """Create Legacy PIN.
 
@@ -505,7 +505,7 @@ def create_pins_xml() -> str:
     return call("POST", "/pins.xml", query=None, body=None, form=None, host='https://plex.tv')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_play_queues(uri: str | None = None, playlist_id: int | None = None, type: str | None = None, key: str | None = None, shuffle: str | None = None, repeat: str | None = None, continuous: str | None = None, extras_prefix_count: int | None = None, recursive: str | None = None, on_deck: str | None = None) -> str:
     """Create a play queue.
 
@@ -526,7 +526,7 @@ def create_play_queues(uri: str | None = None, playlist_id: int | None = None, t
     return call("POST", "/playQueues", query={"uri": uri, "playlistID": playlist_id, "type": type, "key": key, "shuffle": shuffle, "repeat": repeat, "continuous": continuous, "extrasPrefixCount": extras_prefix_count, "recursive": recursive, "onDeck": on_deck}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_player_playback_audio_stream(stream_id: int | None = None) -> str:
     """Player Audio Stream.
 
@@ -538,7 +538,7 @@ def create_player_playback_audio_stream(stream_id: int | None = None) -> str:
     return call("POST", "/player/playback/audioStream", query={"streamID": stream_id}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_player_playback_mute() -> str:
     """Player Mute.
 
@@ -547,7 +547,7 @@ def create_player_playback_mute() -> str:
     return call("POST", "/player/playback/mute", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_player_playback_pause() -> str:
     """Player Pause.
 
@@ -556,7 +556,7 @@ def create_player_playback_pause() -> str:
     return call("POST", "/player/playback/pause", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_player_playback_play() -> str:
     """Player Play.
 
@@ -565,7 +565,7 @@ def create_player_playback_play() -> str:
     return call("POST", "/player/playback/play", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_player_playback_play_media(key: str | None = None, offset: int | None = None, machine_identifier: str | None = None) -> str:
     """Player Play Media.
 
@@ -579,7 +579,7 @@ def create_player_playback_play_media(key: str | None = None, offset: int | None
     return call("POST", "/player/playback/playMedia", query={"key": key, "offset": offset, "machineIdentifier": machine_identifier}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_player_playback_refresh_play_queue() -> str:
     """Player Refresh Play Queue.
 
@@ -588,7 +588,7 @@ def create_player_playback_refresh_play_queue() -> str:
     return call("POST", "/player/playback/refreshPlayQueue", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_player_playback_seek(offset: int | None = None) -> str:
     """Player Seek.
 
@@ -600,7 +600,7 @@ def create_player_playback_seek(offset: int | None = None) -> str:
     return call("POST", "/player/playback/seek", query={"offset": offset}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_player_playback_set_parameters(shuffle: int | None = None, repeat: int | None = None, volume: int | None = None) -> str:
     """Player Set Parameters.
 
@@ -614,7 +614,7 @@ def create_player_playback_set_parameters(shuffle: int | None = None, repeat: in
     return call("POST", "/player/playback/setParameters", query={"shuffle": shuffle, "repeat": repeat, "volume": volume}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_player_playback_set_rating(rating: int | None = None) -> str:
     """Player Set Rating.
 
@@ -626,7 +626,7 @@ def create_player_playback_set_rating(rating: int | None = None) -> str:
     return call("POST", "/player/playback/setRating", query={"rating": rating}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_player_playback_set_state(state: str | None = None) -> str:
     """Player Set State.
 
@@ -638,7 +638,7 @@ def create_player_playback_set_state(state: str | None = None) -> str:
     return call("POST", "/player/playback/setState", query={"state": state}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_player_playback_set_streams(audio_stream_id: int | None = None, subtitle_stream_id: int | None = None, video_stream_id: int | None = None) -> str:
     """Player Set Streams.
 
@@ -652,7 +652,7 @@ def create_player_playback_set_streams(audio_stream_id: int | None = None, subti
     return call("POST", "/player/playback/setStreams", query={"audioStreamID": audio_stream_id, "subtitleStreamID": subtitle_stream_id, "videoStreamID": video_stream_id}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_player_playback_set_text_stream(stream_id: int | None = None) -> str:
     """Player Set Text Stream.
 
@@ -664,7 +664,7 @@ def create_player_playback_set_text_stream(stream_id: int | None = None) -> str:
     return call("POST", "/player/playback/setTextStream", query={"streamID": stream_id}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_player_playback_set_view_offset(offset: int | None = None) -> str:
     """Player Set View Offset.
 
@@ -676,7 +676,7 @@ def create_player_playback_set_view_offset(offset: int | None = None) -> str:
     return call("POST", "/player/playback/setViewOffset", query={"offset": offset}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_player_playback_skip_by(offset: int | None = None) -> str:
     """Player Skip By.
 
@@ -688,7 +688,7 @@ def create_player_playback_skip_by(offset: int | None = None) -> str:
     return call("POST", "/player/playback/skipBy", query={"offset": offset}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_player_playback_skip_to(key: str | None = None) -> str:
     """Player Skip To.
 
@@ -700,7 +700,7 @@ def create_player_playback_skip_to(key: str | None = None) -> str:
     return call("POST", "/player/playback/skipTo", query={"key": key}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_player_playback_step_back() -> str:
     """Player Step Back.
 
@@ -709,7 +709,7 @@ def create_player_playback_step_back() -> str:
     return call("POST", "/player/playback/stepBack", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_player_playback_step_forward() -> str:
     """Player Step Forward.
 
@@ -718,7 +718,7 @@ def create_player_playback_step_forward() -> str:
     return call("POST", "/player/playback/stepForward", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_player_playback_stop() -> str:
     """Player Stop.
 
@@ -727,7 +727,7 @@ def create_player_playback_stop() -> str:
     return call("POST", "/player/playback/stop", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_player_playback_subtitle_stream(stream_id: int | None = None) -> str:
     """Player Subtitle Stream.
 
@@ -739,7 +739,7 @@ def create_player_playback_subtitle_stream(stream_id: int | None = None) -> str:
     return call("POST", "/player/playback/subtitleStream", query={"streamID": stream_id}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_player_playback_unmute() -> str:
     """Player Unmute.
 
@@ -748,7 +748,7 @@ def create_player_playback_unmute() -> str:
     return call("POST", "/player/playback/unmute", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_player_playback_video_stream(stream_id: int | None = None) -> str:
     """Player Video Stream.
 
@@ -760,7 +760,7 @@ def create_player_playback_video_stream(stream_id: int | None = None) -> str:
     return call("POST", "/player/playback/videoStream", query={"streamID": stream_id}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_player_playback_volume(level: int | None = None) -> str:
     """Player Volume.
 
@@ -772,7 +772,7 @@ def create_player_playback_volume(level: int | None = None) -> str:
     return call("POST", "/player/playback/volume", query={"level": level}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_playlists(uri: str | None = None, play_queue_id: int | None = None) -> str:
     """Create a Playlist.
 
@@ -785,7 +785,7 @@ def create_playlists(uri: str | None = None, play_queue_id: int | None = None) -
     return call("POST", "/playlists", query={"uri": uri, "playQueueID": play_queue_id}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_playlists_upload(path: str | None = None, force: str | None = None) -> str:
     """Upload media art.
 
@@ -798,7 +798,7 @@ def create_playlists_upload(path: str | None = None, force: str | None = None) -
     return call("POST", "/playlists/upload", query={"path": path, "force": force}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_security_token(type: str | None = None, scope: str | None = None) -> str:
     """Get Transient Tokens.
 
@@ -811,7 +811,7 @@ def create_security_token(type: str | None = None, scope: str | None = None) -> 
     return call("POST", "/security/token", query={"type": type, "scope": scope}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_servers_by_machine_id_shared_servers(machine_id: str) -> str:
     """Share Server (Legacy v1).
 
@@ -823,7 +823,7 @@ def create_servers_by_machine_id_shared_servers(machine_id: str) -> str:
     return call("POST", f"/servers/{machine_id}/shared_servers", query=None, body=None, form=None, host='https://plex.tv/api')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_shared_servers() -> str:
     """Share Server.
 
@@ -832,7 +832,7 @@ def create_shared_servers() -> str:
     return call("POST", "/shared_servers", query=None, body=None, form=None, host='https://plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_status_sessions_terminate(session_id: str | None = None, reason: str | None = None) -> str:
     """Terminate a session.
 
@@ -845,7 +845,7 @@ def create_status_sessions_terminate(session_id: str | None = None, reason: str 
     return call("POST", "/status/sessions/terminate", query={"sessionId": session_id, "reason": reason}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_timeline(key: str | None = None, rating_key: str | None = None, state: str | None = None, play_queue_item_id: str | None = None, time: int | None = None, duration: int | None = None, continuing: str | None = None, updated: int | None = None, offline: str | None = None, time_to_first_frame: int | None = None, time_stalled: int | None = None, bandwidth: int | None = None, buffered_time: int | None = None, buffered_size: int | None = None, container_key: str | None = None, guid: str | None = None, play_queue_id: int | None = None, url: str | None = None) -> str:
     """Report media timeline.
 
@@ -874,7 +874,7 @@ def create_timeline(key: str | None = None, rating_key: str | None = None, state
     return call("POST", "/:/timeline", query={"key": key, "ratingKey": rating_key, "state": state, "playQueueItemID": play_queue_item_id, "time": time, "duration": duration, "continuing": continuing, "updated": updated, "offline": offline, "timeToFirstFrame": time_to_first_frame, "timeStalled": time_stalled, "bandwidth": bandwidth, "bufferedTime": buffered_time, "bufferedSize": buffered_size, "containerKey": container_key, "guid": guid, "playQueueID": play_queue_id, "url": url}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_users_password() -> str:
     """Change Password.
 
@@ -883,7 +883,7 @@ def create_users_password() -> str:
     return call("POST", "/users/password", query=None, body=None, form=None, host='https://plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_users_signin(body: dict) -> str:
     """Get User Sign In Data.
 
@@ -895,7 +895,7 @@ def create_users_signin(body: dict) -> str:
     return call("POST", "/users/signin", query=None, body=body, form=None, host='https://plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_v2_user_webhooks() -> str:
     """Add User Webhook.
 
@@ -904,7 +904,7 @@ def create_v2_user_webhooks() -> str:
     return call("POST", "/api/v2/user/webhooks", query=None, body=None, form=None, host='https://plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def create_webhooks() -> str:
     """Add Webhook.
 
@@ -913,7 +913,7 @@ def create_webhooks() -> str:
     return call("POST", "/webhooks", query=None, body=None, form=None, host='https://plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_activities_by_activity_id(activity_id: str) -> str:
     """Cancel a running activity.
 
@@ -925,7 +925,7 @@ def delete_activities_by_activity_id(activity_id: str) -> str:
     return call("DELETE", f"/activities/{activity_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_butler() -> str:
     """Stop all Butler tasks.
 
@@ -934,7 +934,7 @@ def delete_butler() -> str:
     return call("DELETE", "/butler", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_butler_by_butler_task(butler_task: str) -> str:
     """Stop a single Butler task.
 
@@ -946,7 +946,7 @@ def delete_butler_by_butler_task(butler_task: str) -> str:
     return call("DELETE", f"/butler/{butler_task}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_download_queue_by_queue_id_items_by_item_id(queue_id: int, item_id: list) -> str:
     """Delete download queue items.
 
@@ -959,7 +959,7 @@ def delete_download_queue_by_queue_id_items_by_item_id(queue_id: int, item_id: l
     return call("DELETE", f"/downloadQueue/{queue_id}/items/{item_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_home_users_by_user_id(user_id: int) -> str:
     """Delete Home User.
 
@@ -971,7 +971,7 @@ def delete_home_users_by_user_id(user_id: int) -> str:
     return call("DELETE", f"/home/users/{user_id}", query=None, body=None, form=None, host='https://plex.tv/api')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_hubs_sections_by_section_id_manage(section_id: int) -> str:
     """Reset hubs to defaults.
 
@@ -983,7 +983,7 @@ def delete_hubs_sections_by_section_id_manage(section_id: int) -> str:
     return call("DELETE", f"/hubs/sections/{section_id}/manage", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_hubs_sections_by_section_id_manage_by_identifier(section_id: int, identifier: str) -> str:
     """Delete a custom hub.
 
@@ -996,7 +996,7 @@ def delete_hubs_sections_by_section_id_manage_by_identifier(section_id: int, ide
     return call("DELETE", f"/hubs/sections/{section_id}/manage/{identifier}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_library_caches() -> str:
     """Delete library caches.
 
@@ -1005,7 +1005,7 @@ def delete_library_caches() -> str:
     return call("DELETE", "/library/caches", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_library_metadata_by_ids(ids: str, proxy: str | None = None) -> str:
     """Delete a metadata item.
 
@@ -1018,7 +1018,7 @@ def delete_library_metadata_by_ids(ids: str, proxy: str | None = None) -> str:
     return call("DELETE", f"/library/metadata/{ids}", query={"proxy": proxy}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_library_metadata_by_ids_marker_by_marker(ids: str, marker: str) -> str:
     """Delete a marker.
 
@@ -1031,7 +1031,7 @@ def delete_library_metadata_by_ids_marker_by_marker(ids: str, marker: str) -> st
     return call("DELETE", f"/library/metadata/{ids}/marker/{marker}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_library_metadata_by_ids_media_by_media_item(ids: str, media_item: str, proxy: str | None = None) -> str:
     """Delete a media item.
 
@@ -1045,7 +1045,7 @@ def delete_library_metadata_by_ids_media_by_media_item(ids: str, media_item: str
     return call("DELETE", f"/library/metadata/{ids}/media/{media_item}", query={"proxy": proxy}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_library_sections_all_refresh() -> str:
     """Stop refresh.
 
@@ -1054,7 +1054,7 @@ def delete_library_sections_all_refresh() -> str:
     return call("DELETE", "/library/sections/all/refresh", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_library_sections_by_section_id(section_id: str, async_: str | None = None) -> str:
     """Delete a library section.
 
@@ -1067,7 +1067,7 @@ def delete_library_sections_by_section_id(section_id: str, async_: str | None = 
     return call("DELETE", f"/library/sections/{section_id}", query={"async": async_}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_library_sections_by_section_id_collection_by_collection_id(section_id: int, collection_id: int) -> str:
     """Delete a collection.
 
@@ -1080,7 +1080,7 @@ def delete_library_sections_by_section_id_collection_by_collection_id(section_id
     return call("DELETE", f"/library/sections/{section_id}/collection/{collection_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_library_sections_by_section_id_indexes(section_id: int) -> str:
     """Delete section indexes.
 
@@ -1092,7 +1092,7 @@ def delete_library_sections_by_section_id_indexes(section_id: int) -> str:
     return call("DELETE", f"/library/sections/{section_id}/indexes", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_library_sections_by_section_id_intros(section_id: int) -> str:
     """Delete section intro markers.
 
@@ -1104,7 +1104,7 @@ def delete_library_sections_by_section_id_intros(section_id: int) -> str:
     return call("DELETE", f"/library/sections/{section_id}/intros", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_library_sections_by_section_id_refresh(section_id: int) -> str:
     """Cancel section refresh.
 
@@ -1116,7 +1116,7 @@ def delete_library_sections_by_section_id_refresh(section_id: int) -> str:
     return call("DELETE", f"/library/sections/{section_id}/refresh", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_library_streams_by_stream_id_ext(stream_id: int, ext: str) -> str:
     """Delete a stream.
 
@@ -1129,7 +1129,7 @@ def delete_library_streams_by_stream_id_ext(stream_id: int, ext: str) -> str:
     return call("DELETE", f"/library/streams/{stream_id}.{ext}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_livetv_dvrs_by_dvr_id(dvr_id: int) -> str:
     """Delete a single DVR.
 
@@ -1141,7 +1141,7 @@ def delete_livetv_dvrs_by_dvr_id(dvr_id: int) -> str:
     return call("DELETE", f"/livetv/dvrs/{dvr_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_livetv_dvrs_by_dvr_id_devices_by_device_id(dvr_id: int, device_id: int) -> str:
     """Remove a device from an existing DVR.
 
@@ -1154,7 +1154,7 @@ def delete_livetv_dvrs_by_dvr_id_devices_by_device_id(dvr_id: int, device_id: in
     return call("DELETE", f"/livetv/dvrs/{dvr_id}/devices/{device_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_livetv_dvrs_by_dvr_id_lineups(dvr_id: int, lineup: str | None = None) -> str:
     """Delete a DVR Lineup.
 
@@ -1167,7 +1167,7 @@ def delete_livetv_dvrs_by_dvr_id_lineups(dvr_id: int, lineup: str | None = None)
     return call("DELETE", f"/livetv/dvrs/{dvr_id}/lineups", query={"lineup": lineup}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_livetv_dvrs_by_dvr_id_reload_guide(dvr_id: int) -> str:
     """Tell a DVR to stop reloading program guide.
 
@@ -1179,7 +1179,7 @@ def delete_livetv_dvrs_by_dvr_id_reload_guide(dvr_id: int) -> str:
     return call("DELETE", f"/livetv/dvrs/{dvr_id}/reloadGuide", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_livetv_sessions_by_session_id(session_id: str) -> str:
     """Delete Live TV Session.
 
@@ -1191,7 +1191,7 @@ def delete_livetv_sessions_by_session_id(session_id: str) -> str:
     return call("DELETE", f"/livetv/sessions/{session_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_media_grabbers_devices_by_device_id(device_id: int) -> str:
     """Remove a device.
 
@@ -1203,7 +1203,7 @@ def delete_media_grabbers_devices_by_device_id(device_id: int) -> str:
     return call("DELETE", f"/media/grabbers/devices/{device_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_media_grabbers_devices_by_device_id_scan(device_id: int) -> str:
     """Tell a device to stop scanning for channels.
 
@@ -1215,7 +1215,7 @@ def delete_media_grabbers_devices_by_device_id_scan(device_id: int) -> str:
     return call("DELETE", f"/media/grabbers/devices/{device_id}/scan", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_media_grabbers_operations_by_operation_id(operation_id: str) -> str:
     """Cancel an existing grab.
 
@@ -1227,7 +1227,7 @@ def delete_media_grabbers_operations_by_operation_id(operation_id: str) -> str:
     return call("DELETE", f"/media/grabbers/operations/{operation_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_media_providers_by_provider(provider: str) -> str:
     """Delete a media provider.
 
@@ -1239,7 +1239,7 @@ def delete_media_providers_by_provider(provider: str) -> str:
     return call("DELETE", f"/media/providers/{provider}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_media_subscriptions_by_subscription_id(subscription_id: int) -> str:
     """Delete a subscription.
 
@@ -1251,7 +1251,7 @@ def delete_media_subscriptions_by_subscription_id(subscription_id: int) -> str:
     return call("DELETE", f"/media/subscriptions/{subscription_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_play_queues_by_play_queue_id_items(play_queue_id: int) -> str:
     """Clear a play queue.
 
@@ -1263,7 +1263,7 @@ def delete_play_queues_by_play_queue_id_items(play_queue_id: int) -> str:
     return call("DELETE", f"/playQueues/{play_queue_id}/items", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_play_queues_by_play_queue_id_items_by_play_queue_item_id(play_queue_id: int, play_queue_item_id: int) -> str:
     """Delete an item from a play queue.
 
@@ -1276,7 +1276,7 @@ def delete_play_queues_by_play_queue_id_items_by_play_queue_item_id(play_queue_i
     return call("DELETE", f"/playQueues/{play_queue_id}/items/{play_queue_item_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_playlists(rating_key: int | None = None) -> str:
     """Delete Playlist.
 
@@ -1288,7 +1288,7 @@ def delete_playlists(rating_key: int | None = None) -> str:
     return call("DELETE", "/playlists", query={"ratingKey": rating_key}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_playlists_by_playlist_id(playlist_id: int) -> str:
     """Delete a Playlist.
 
@@ -1300,7 +1300,7 @@ def delete_playlists_by_playlist_id(playlist_id: int) -> str:
     return call("DELETE", f"/playlists/{playlist_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_playlists_by_playlist_id_items(playlist_id: int) -> str:
     """Clearing a playlist.
 
@@ -1312,7 +1312,7 @@ def delete_playlists_by_playlist_id_items(playlist_id: int) -> str:
     return call("DELETE", f"/playlists/{playlist_id}/items", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_playlists_by_playlist_id_items_by_generator_id(playlist_id: int, generator_id: int) -> str:
     """Delete a Generator.
 
@@ -1325,7 +1325,7 @@ def delete_playlists_by_playlist_id_items_by_generator_id(playlist_id: int, gene
     return call("DELETE", f"/playlists/{playlist_id}/items/{generator_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_sharings_by_user_id(user_id: int) -> str:
     """Remove Share.
 
@@ -1337,7 +1337,7 @@ def delete_sharings_by_user_id(user_id: int) -> str:
     return call("DELETE", f"/sharings/{user_id}", query=None, body=None, form=None, host='https://plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_status_sessions_history_by_history_id(history_id: int) -> str:
     """Delete Single History Item.
 
@@ -1349,7 +1349,7 @@ def delete_status_sessions_history_by_history_id(history_id: int) -> str:
     return call("DELETE", f"/status/sessions/history/{history_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_DESTRUCTIVE)
+@operation(_DESTRUCTIVE)
 def delete_users_signout() -> str:
     """Sign Out.
 
@@ -1358,7 +1358,7 @@ def delete_users_signout() -> str:
     return call("DELETE", "/users/signout", query=None, body=None, form=None, host='https://plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_by_transcode_type_transcode_universal_decision(transcode_type: str, platform: str | None = None, audio_boost: int | None = None, audio_channel_count: int | None = None, auto_adjust_quality: str | None = None, auto_adjust_subtitle: str | None = None, direct_play: str | None = None, direct_stream: str | None = None, direct_stream_audio: str | None = None, disable_resolution_rotation: str | None = None, has_mde: str | None = None, location: str | None = None, media_buffer_size: int | None = None, media_index: int | None = None, music_bitrate: int | None = None, offset: float | None = None, part_index: int | None = None, path: str | None = None, peak_bitrate: int | None = None, photo_resolution: str | None = None, protocol: str | None = None, seconds_per_segment: int | None = None, subtitle_size: int | None = None, subtitles: str | None = None, max_video_bitrate: int | None = None, video_resolution: str | None = None, copyts: str | None = None, video_bitrate: int | None = None, video_quality: int | None = None) -> str:
     """Make a decision on media playback.
 
@@ -1398,7 +1398,7 @@ def get_by_transcode_type_transcode_universal_decision(transcode_type: str, plat
     return call("GET", f"/{transcode_type}/:/transcode/universal/decision", query={"platform": platform, "audioBoost": audio_boost, "audioChannelCount": audio_channel_count, "autoAdjustQuality": auto_adjust_quality, "autoAdjustSubtitle": auto_adjust_subtitle, "directPlay": direct_play, "directStream": direct_stream, "directStreamAudio": direct_stream_audio, "disableResolutionRotation": disable_resolution_rotation, "hasMDE": has_mde, "location": location, "mediaBufferSize": media_buffer_size, "mediaIndex": media_index, "musicBitrate": music_bitrate, "offset": offset, "partIndex": part_index, "path": path, "peakBitrate": peak_bitrate, "photoResolution": photo_resolution, "protocol": protocol, "secondsPerSegment": seconds_per_segment, "subtitleSize": subtitle_size, "subtitles": subtitles, "maxVideoBitrate": max_video_bitrate, "videoResolution": video_resolution, "copyts": copyts, "videoBitrate": video_bitrate, "videoQuality": video_quality}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_by_transcode_type_transcode_universal_session_by_session_id_by_segment_id_m4s(transcode_type: str, session_id: str, segment_id: str) -> str:
     """Get DASH Segment.
 
@@ -1412,7 +1412,7 @@ def get_by_transcode_type_transcode_universal_session_by_session_id_by_segment_i
     return call("GET", f"/{transcode_type}/:/transcode/universal/session/{session_id}/{segment_id}.m4s", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_by_transcode_type_transcode_universal_session_by_session_id_by_segment_id_ts(transcode_type: str, session_id: str, segment_id: str) -> str:
     """Get HLS Segment.
 
@@ -1426,7 +1426,7 @@ def get_by_transcode_type_transcode_universal_session_by_session_id_by_segment_i
     return call("GET", f"/{transcode_type}/:/transcode/universal/session/{session_id}/{segment_id}.ts", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_by_transcode_type_transcode_universal_start_extension(extension: str, transcode_type: str, platform: str | None = None, audio_boost: int | None = None, audio_channel_count: int | None = None, auto_adjust_quality: str | None = None, auto_adjust_subtitle: str | None = None, direct_play: str | None = None, direct_stream: str | None = None, direct_stream_audio: str | None = None, disable_resolution_rotation: str | None = None, has_mde: str | None = None, location: str | None = None, media_buffer_size: int | None = None, media_index: int | None = None, music_bitrate: int | None = None, offset: float | None = None, part_index: int | None = None, path: str | None = None, peak_bitrate: int | None = None, photo_resolution: str | None = None, protocol: str | None = None, seconds_per_segment: int | None = None, subtitle_size: int | None = None, subtitles: str | None = None, max_video_bitrate: int | None = None, video_resolution: str | None = None, copyts: str | None = None, video_bitrate: int | None = None, video_quality: int | None = None) -> str:
     """Start A Transcoding Session.
 
@@ -1467,7 +1467,7 @@ def get_by_transcode_type_transcode_universal_start_extension(extension: str, tr
     return call("GET", f"/{transcode_type}/:/transcode/universal/start.{extension}", query={"platform": platform, "audioBoost": audio_boost, "audioChannelCount": audio_channel_count, "autoAdjustQuality": auto_adjust_quality, "autoAdjustSubtitle": auto_adjust_subtitle, "directPlay": direct_play, "directStream": direct_stream, "directStreamAudio": direct_stream_audio, "disableResolutionRotation": disable_resolution_rotation, "hasMDE": has_mde, "location": location, "mediaBufferSize": media_buffer_size, "mediaIndex": media_index, "musicBitrate": music_bitrate, "offset": offset, "partIndex": part_index, "path": path, "peakBitrate": peak_bitrate, "photoResolution": photo_resolution, "protocol": protocol, "secondsPerSegment": seconds_per_segment, "subtitleSize": subtitle_size, "subtitles": subtitles, "maxVideoBitrate": max_video_bitrate, "videoResolution": video_resolution, "copyts": copyts, "videoBitrate": video_bitrate, "videoQuality": video_quality}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_by_transcode_type_transcode_universal_subtitles(transcode_type: str, platform: str | None = None, audio_boost: int | None = None, audio_channel_count: int | None = None, auto_adjust_quality: str | None = None, auto_adjust_subtitle: str | None = None, direct_play: str | None = None, direct_stream: str | None = None, direct_stream_audio: str | None = None, disable_resolution_rotation: str | None = None, has_mde: str | None = None, location: str | None = None, media_buffer_size: int | None = None, media_index: int | None = None, music_bitrate: int | None = None, offset: float | None = None, part_index: int | None = None, path: str | None = None, peak_bitrate: int | None = None, photo_resolution: str | None = None, protocol: str | None = None, seconds_per_segment: int | None = None, subtitle_size: int | None = None, subtitles: str | None = None, max_video_bitrate: int | None = None, video_resolution: str | None = None, copyts: str | None = None, video_bitrate: int | None = None, video_quality: int | None = None) -> str:
     """Transcode subtitles.
 
@@ -1507,7 +1507,7 @@ def get_by_transcode_type_transcode_universal_subtitles(transcode_type: str, pla
     return call("GET", f"/{transcode_type}/:/transcode/universal/subtitles", query={"platform": platform, "audioBoost": audio_boost, "audioChannelCount": audio_channel_count, "autoAdjustQuality": auto_adjust_quality, "autoAdjustSubtitle": auto_adjust_subtitle, "directPlay": direct_play, "directStream": direct_stream, "directStreamAudio": direct_stream_audio, "disableResolutionRotation": disable_resolution_rotation, "hasMDE": has_mde, "location": location, "mediaBufferSize": media_buffer_size, "mediaIndex": media_index, "musicBitrate": music_bitrate, "offset": offset, "partIndex": part_index, "path": path, "peakBitrate": peak_bitrate, "photoResolution": photo_resolution, "protocol": protocol, "secondsPerSegment": seconds_per_segment, "subtitleSize": subtitle_size, "subtitles": subtitles, "maxVideoBitrate": max_video_bitrate, "videoResolution": video_resolution, "copyts": copyts, "videoBitrate": video_bitrate, "videoQuality": video_quality}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_download_queue_by_queue_id(queue_id: int) -> str:
     """Get a download queue.
 
@@ -1519,7 +1519,7 @@ def get_download_queue_by_queue_id(queue_id: int) -> str:
     return call("GET", f"/downloadQueue/{queue_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_download_queue_by_queue_id_item_by_item_id_decision(queue_id: int, item_id: int) -> str:
     """Grab download queue item decision.
 
@@ -1532,7 +1532,7 @@ def get_download_queue_by_queue_id_item_by_item_id_decision(queue_id: int, item_
     return call("GET", f"/downloadQueue/{queue_id}/item/{item_id}/decision", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_download_queue_by_queue_id_item_by_item_id_media(queue_id: int, item_id: int) -> str:
     """Grab download queue media.
 
@@ -1545,7 +1545,7 @@ def get_download_queue_by_queue_id_item_by_item_id_media(queue_id: int, item_id:
     return call("GET", f"/downloadQueue/{queue_id}/item/{item_id}/media", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_download_queue_by_queue_id_items(queue_id: int) -> str:
     """Get download queue items.
 
@@ -1557,7 +1557,7 @@ def get_download_queue_by_queue_id_items(queue_id: int) -> str:
     return call("GET", f"/downloadQueue/{queue_id}/items", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_download_queue_by_queue_id_items_by_item_id(queue_id: int, item_id: list) -> str:
     """Get download queue items.
 
@@ -1570,7 +1570,7 @@ def get_download_queue_by_queue_id_items_by_item_id(queue_id: int, item_id: list
     return call("GET", f"/downloadQueue/{queue_id}/items/{item_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_downloads_by_channel_json(channel: str) -> str:
     """Get Plex Downloads.
 
@@ -1582,7 +1582,7 @@ def get_downloads_by_channel_json(channel: str) -> str:
     return call("GET", f"/downloads/{channel}.json", query=None, body=None, form=None, host='https://plex.tv')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_hubs_metadata_by_metadata_id(metadata_id: int, only_transient: str | None = None) -> str:
     """Get hubs for section by metadata item.
 
@@ -1595,7 +1595,7 @@ def get_hubs_metadata_by_metadata_id(metadata_id: int, only_transient: str | Non
     return call("GET", f"/hubs/metadata/{metadata_id}", query={"onlyTransient": only_transient}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_hubs_metadata_by_metadata_id_postplay(metadata_id: int, only_transient: str | None = None) -> str:
     """Get postplay hubs.
 
@@ -1608,7 +1608,7 @@ def get_hubs_metadata_by_metadata_id_postplay(metadata_id: int, only_transient: 
     return call("GET", f"/hubs/metadata/{metadata_id}/postplay", query={"onlyTransient": only_transient}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_hubs_metadata_by_metadata_id_related(metadata_id: int, only_transient: str | None = None) -> str:
     """Get related hubs.
 
@@ -1621,7 +1621,7 @@ def get_hubs_metadata_by_metadata_id_related(metadata_id: int, only_transient: s
     return call("GET", f"/hubs/metadata/{metadata_id}/related", query={"onlyTransient": only_transient}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_hubs_sections_by_section_id(section_id: int, only_transient: str | None = None) -> str:
     """Get section hubs.
 
@@ -1634,7 +1634,7 @@ def get_hubs_sections_by_section_id(section_id: int, only_transient: str | None 
     return call("GET", f"/hubs/sections/{section_id}", query={"onlyTransient": only_transient}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_hubs_sections_by_section_id_manage(section_id: int, metadata_item_id: int | None = None) -> str:
     """Get hubs.
 
@@ -1647,7 +1647,7 @@ def get_hubs_sections_by_section_id_manage(section_id: int, metadata_item_id: in
     return call("GET", f"/hubs/sections/{section_id}/manage", query={"metadataItemId": metadata_item_id}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_collections_by_collection_id_composite_by_updated_at(collection_id: int, updated_at: int) -> str:
     """Get a collection's image.
 
@@ -1660,7 +1660,7 @@ def get_library_collections_by_collection_id_composite_by_updated_at(collection_
     return call("GET", f"/library/collections/{collection_id}/composite/{updated_at}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_collections_by_collection_id_items(collection_id: int) -> str:
     """Get items in a collection.
 
@@ -1672,7 +1672,7 @@ def get_library_collections_by_collection_id_items(collection_id: int) -> str:
     return call("GET", f"/library/collections/{collection_id}/items", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_media_by_media_id_chapter_images_by_chapter(media_id: int, chapter: int) -> str:
     """Get a chapter image.
 
@@ -1685,7 +1685,7 @@ def get_library_media_by_media_id_chapter_images_by_chapter(media_id: int, chapt
     return call("GET", f"/library/media/{media_id}/chapterImages/{chapter}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_metadata_augmentations_by_augmentation_id(augmentation_id: str, wait: str | None = None) -> str:
     """Get augmentation status.
 
@@ -1698,7 +1698,7 @@ def get_library_metadata_augmentations_by_augmentation_id(augmentation_id: str, 
     return call("GET", f"/library/metadata/augmentations/{augmentation_id}", query={"wait": wait}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_metadata_by_id_children(id: int) -> str:
     """Get Metadata Children.
 
@@ -1710,7 +1710,7 @@ def get_library_metadata_by_id_children(id: int) -> str:
     return call("GET", f"/library/metadata/{id}/children", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_metadata_by_id_compute_path(id: int) -> str:
     """Compute Sonic Path.
 
@@ -1722,7 +1722,7 @@ def get_library_metadata_by_id_compute_path(id: int) -> str:
     return call("GET", f"/library/metadata/{id}/computePath", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_metadata_by_id_grandchildren(id: int) -> str:
     """Get Metadata Grandchildren.
 
@@ -1734,7 +1734,7 @@ def get_library_metadata_by_id_grandchildren(id: int) -> str:
     return call("GET", f"/library/metadata/{id}/grandchildren", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_metadata_by_id_grandparent(id: int) -> str:
     """Get Metadata Grandparent.
 
@@ -1746,7 +1746,7 @@ def get_library_metadata_by_id_grandparent(id: int) -> str:
     return call("GET", f"/library/metadata/{id}/grandparent", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_metadata_by_id_nearest(id: int, exclude_parent_id: int | None = None, exclude_grandparent_id: int | None = None, limit: int | None = None, max_distance: float | None = None) -> str:
     """Get Nearest Metadata.
 
@@ -1762,7 +1762,7 @@ def get_library_metadata_by_id_nearest(id: int, exclude_parent_id: int | None = 
     return call("GET", f"/library/metadata/{id}/nearest", query={"excludeParentID": exclude_parent_id, "excludeGrandparentID": exclude_grandparent_id, "limit": limit, "maxDistance": max_distance}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_metadata_by_id_on_deck(id: int) -> str:
     """Get Metadata On Deck.
 
@@ -1774,7 +1774,7 @@ def get_library_metadata_by_id_on_deck(id: int) -> str:
     return call("GET", f"/library/metadata/{id}/onDeck", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_metadata_by_id_parent(id: int) -> str:
     """Get Metadata Parent.
 
@@ -1786,7 +1786,7 @@ def get_library_metadata_by_id_parent(id: int) -> str:
     return call("GET", f"/library/metadata/{id}/parent", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_metadata_by_id_reviews(id: int) -> str:
     """Get Metadata Reviews.
 
@@ -1798,7 +1798,7 @@ def get_library_metadata_by_id_reviews(id: int) -> str:
     return call("GET", f"/library/metadata/{id}/reviews", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_metadata_by_ids(ids: list, async_check_files: str | None = None, async_refresh_local_media_agent: str | None = None, async_refresh_analysis: str | None = None, check_files: str | None = None, skip_refresh: str | None = None, check_file_availability: str | None = None, async_augment_metadata: str | None = None, augment_count: str | None = None, include_markers: bool | None = None, include_guids: bool | None = None, include_chapters: bool | None = None, include_external_media: bool | None = None, include_extras: bool | None = None, include_related: bool | None = None, include_on_deck: bool | None = None, include_popular_leaves: bool | None = None, include_reviews: bool | None = None, include_stations: bool | None = None, exclude_elements: str | None = None, exclude_fields: str | None = None) -> str:
     """Get a metadata item.
 
@@ -1830,7 +1830,7 @@ def get_library_metadata_by_ids(ids: list, async_check_files: str | None = None,
     return call("GET", f"/library/metadata/{ids}", query={"asyncCheckFiles": async_check_files, "asyncRefreshLocalMediaAgent": async_refresh_local_media_agent, "asyncRefreshAnalysis": async_refresh_analysis, "checkFiles": check_files, "skipRefresh": skip_refresh, "checkFileAvailability": check_file_availability, "asyncAugmentMetadata": async_augment_metadata, "augmentCount": augment_count, "includeMarkers": include_markers, "includeGuids": include_guids, "includeChapters": include_chapters, "includeExternalMedia": include_external_media, "includeExtras": include_extras, "includeRelated": include_related, "includeOnDeck": include_on_deck, "includePopularLeaves": include_popular_leaves, "includeReviews": include_reviews, "includeStations": include_stations, "excludeElements": exclude_elements, "excludeFields": exclude_fields}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_metadata_by_ids_all_leaves(ids: str) -> str:
     """Get the leaves of an item.
 
@@ -1842,7 +1842,7 @@ def get_library_metadata_by_ids_all_leaves(ids: str) -> str:
     return call("GET", f"/library/metadata/{ids}/allLeaves", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_metadata_by_ids_by_element_by_timestamp(ids: str, element: str, timestamp: int) -> str:
     """Get an item's artwork, theme, etc.
 
@@ -1856,7 +1856,7 @@ def get_library_metadata_by_ids_by_element_by_timestamp(ids: str, element: str, 
     return call("GET", f"/library/metadata/{ids}/{element}/{timestamp}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_metadata_by_ids_extras(ids: str) -> str:
     """Get an item's extras.
 
@@ -1868,7 +1868,7 @@ def get_library_metadata_by_ids_extras(ids: str) -> str:
     return call("GET", f"/library/metadata/{ids}/extras", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_metadata_by_ids_file(ids: str, url: str | None = None) -> str:
     """Get a file from a metadata or media bundle.
 
@@ -1881,7 +1881,7 @@ def get_library_metadata_by_ids_file(ids: str, url: str | None = None) -> str:
     return call("GET", f"/library/metadata/{ids}/file", query={"url": url}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_metadata_by_ids_related(ids: str) -> str:
     """Get related items.
 
@@ -1893,7 +1893,7 @@ def get_library_metadata_by_ids_related(ids: str) -> str:
     return call("GET", f"/library/metadata/{ids}/related", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_metadata_by_ids_similar(ids: str) -> str:
     """Get similar items.
 
@@ -1905,7 +1905,7 @@ def get_library_metadata_by_ids_similar(ids: str) -> str:
     return call("GET", f"/library/metadata/{ids}/similar", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_metadata_by_ids_subtitles(ids: str, title: str | None = None, language: str | None = None, media_item_id: int | None = None, url: str | None = None, format: str | None = None, forced: str | None = None, hearing_impaired: str | None = None) -> str:
     """Get subtitles.
 
@@ -1924,7 +1924,7 @@ def get_library_metadata_by_ids_subtitles(ids: str, title: str | None = None, la
     return call("GET", f"/library/metadata/{ids}/subtitles", query={"title": title, "language": language, "mediaItemID": media_item_id, "url": url, "format": format, "forced": forced, "hearingImpaired": hearing_impaired}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_metadata_by_ids_tree(ids: str) -> str:
     """Get metadata items as a tree.
 
@@ -1936,7 +1936,7 @@ def get_library_metadata_by_ids_tree(ids: str) -> str:
     return call("GET", f"/library/metadata/{ids}/tree", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_metadata_by_ids_users_top(ids: str) -> str:
     """Get metadata top users.
 
@@ -1948,7 +1948,7 @@ def get_library_metadata_by_ids_users_top(ids: str) -> str:
     return call("GET", f"/library/metadata/{ids}/users/top", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_parts_by_part_id_by_changestamp_by_filename(part_id: int, changestamp: int, filename: str, download: str | None = None) -> str:
     """Get a media part.
 
@@ -1963,7 +1963,7 @@ def get_library_parts_by_part_id_by_changestamp_by_filename(part_id: int, change
     return call("GET", f"/library/parts/{part_id}/{changestamp}/{filename}", query={"download": download}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_parts_by_part_id_indexes_by_index(part_id: int, index: str, interval: int | None = None) -> str:
     """Get BIF index for a part.
 
@@ -1977,7 +1977,7 @@ def get_library_parts_by_part_id_indexes_by_index(part_id: int, index: str, inte
     return call("GET", f"/library/parts/{part_id}/indexes/{index}", query={"interval": interval}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_parts_by_part_id_indexes_by_index_by_offset(part_id: int, index: str, offset: int) -> str:
     """Get an image from part BIF.
 
@@ -1991,7 +1991,7 @@ def get_library_parts_by_part_id_indexes_by_index_by_offset(part_id: int, index:
     return call("GET", f"/library/parts/{part_id}/indexes/{index}/{offset}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_people_by_person_id(person_id: str) -> str:
     """Get person details.
 
@@ -2003,7 +2003,7 @@ def get_library_people_by_person_id(person_id: str) -> str:
     return call("GET", f"/library/people/{person_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_people_by_person_id_media(person_id: str) -> str:
     """Get media for a person.
 
@@ -2015,7 +2015,7 @@ def get_library_people_by_person_id_media(person_id: str) -> str:
     return call("GET", f"/library/people/{person_id}/media", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id(section_id: str, include_details: str | None = None) -> str:
     """Get a library section by id.
 
@@ -2028,7 +2028,7 @@ def get_library_sections_by_section_id(section_id: str, include_details: str | N
     return call("GET", f"/library/sections/{section_id}", query={"includeDetails": include_details}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_agents(section_id: int) -> str:
     """Get Section Agents.
 
@@ -2040,7 +2040,7 @@ def get_library_sections_by_section_id_agents(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/agents", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_albums(section_id: int) -> str:
     """Set section albums.
 
@@ -2052,7 +2052,7 @@ def get_library_sections_by_section_id_albums(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/albums", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_all(section_id: int, include_meta: str | None = None, include_guids: str | None = None, include_collections: str | None = None, include_external_media: str | None = None, include_advanced: str | None = None, check_files: str | None = None, include_related: str | None = None, include_extras: str | None = None, include_popular_leaves: str | None = None, include_concerts: str | None = None, include_on_deck: str | None = None, include_chapters: str | None = None, include_preferences: str | None = None, include_bandwidths: str | None = None, include_loudness_ramps: str | None = None, include_stations: str | None = None, include_external_ids: str | None = None, include_reviews: str | None = None, include_credits: str | None = None, include_art: str | None = None, include_thumb: str | None = None, include_banner: str | None = None, include_theme: str | None = None, include_fields: str | None = None, exclude_fields: str | None = None, async_augment_metadata: str | None = None, async_refresh_local_media_agent: str | None = None, nocache: str | None = None, skip_refresh: str | None = None, exclude_elements: str | None = None, filters: str | None = None, unwatched: str | None = None, genre: str | None = None, studio: str | None = None, content_rating: str | None = None, resolution: str | None = None, year: int | None = None, first_character: str | None = None) -> str:
     """Get items in the section.
 
@@ -2102,7 +2102,7 @@ def get_library_sections_by_section_id_all(section_id: int, include_meta: str | 
     return call("GET", f"/library/sections/{section_id}/all", query={"includeMeta": include_meta, "includeGuids": include_guids, "includeCollections": include_collections, "includeExternalMedia": include_external_media, "includeAdvanced": include_advanced, "checkFiles": check_files, "includeRelated": include_related, "includeExtras": include_extras, "includePopularLeaves": include_popular_leaves, "includeConcerts": include_concerts, "includeOnDeck": include_on_deck, "includeChapters": include_chapters, "includePreferences": include_preferences, "includeBandwidths": include_bandwidths, "includeLoudnessRamps": include_loudness_ramps, "includeStations": include_stations, "includeExternalIds": include_external_ids, "includeReviews": include_reviews, "includeCredits": include_credits, "includeArt": include_art, "includeThumb": include_thumb, "includeBanner": include_banner, "includeTheme": include_theme, "includeFields": include_fields, "excludeFields": exclude_fields, "asyncAugmentMetadata": async_augment_metadata, "asyncRefreshLocalMediaAgent": async_refresh_local_media_agent, "nocache": nocache, "skipRefresh": skip_refresh, "excludeElements": exclude_elements, "filters": filters, "unwatched": unwatched, "genre": genre, "studio": studio, "contentRating": content_rating, "resolution": resolution, "year": year, "firstCharacter": first_character}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_all_leaves(section_id: int) -> str:
     """Set section leaves.
 
@@ -2114,7 +2114,7 @@ def get_library_sections_by_section_id_all_leaves(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/allLeaves", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_artists(section_id: int) -> str:
     """Get Section Artists.
 
@@ -2126,7 +2126,7 @@ def get_library_sections_by_section_id_artists(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/artists", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_arts(section_id: int) -> str:
     """Set section artwork.
 
@@ -2138,7 +2138,7 @@ def get_library_sections_by_section_id_arts(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/arts", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_autocomplete(section_id: int, field_query: str | None = None) -> str:
     """Get autocompletions for search.
 
@@ -2151,7 +2151,7 @@ def get_library_sections_by_section_id_autocomplete(section_id: int, field_query
     return call("GET", f"/library/sections/{section_id}/autocomplete", query={"field.query": field_query}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_by_content_rating(section_id: int) -> str:
     """Get By Content Rating.
 
@@ -2163,7 +2163,7 @@ def get_library_sections_by_section_id_by_content_rating(section_id: int) -> str
     return call("GET", f"/library/sections/{section_id}/byContentRating", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_by_decade(section_id: int) -> str:
     """Get By Decade.
 
@@ -2175,7 +2175,7 @@ def get_library_sections_by_section_id_by_decade(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/byDecade", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_by_folder(section_id: int) -> str:
     """Get By Folder.
 
@@ -2187,7 +2187,7 @@ def get_library_sections_by_section_id_by_folder(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/byFolder", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_by_resolution(section_id: int) -> str:
     """Get By Resolution.
 
@@ -2199,7 +2199,7 @@ def get_library_sections_by_section_id_by_resolution(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/byResolution", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_by_year(section_id: int) -> str:
     """Get By Year.
 
@@ -2211,7 +2211,7 @@ def get_library_sections_by_section_id_by_year(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/byYear", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_categories(section_id: int) -> str:
     """Set section categories.
 
@@ -2223,7 +2223,7 @@ def get_library_sections_by_section_id_categories(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/categories", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_clips(section_id: int) -> str:
     """Get Section Clips.
 
@@ -2235,7 +2235,7 @@ def get_library_sections_by_section_id_clips(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/clips", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_cluster(section_id: int) -> str:
     """Set section clusters.
 
@@ -2247,7 +2247,7 @@ def get_library_sections_by_section_id_cluster(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/cluster", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_collections(section_id: int) -> str:
     """Get collections in a section.
 
@@ -2259,7 +2259,7 @@ def get_library_sections_by_section_id_collections(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/collections", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_common(section_id: int) -> str:
     """Get common fields for items.
 
@@ -2271,7 +2271,7 @@ def get_library_sections_by_section_id_common(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/common", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_composite_by_updated_at(section_id: int, updated_at: int) -> str:
     """Get a section composite image.
 
@@ -2284,7 +2284,7 @@ def get_library_sections_by_section_id_composite_by_updated_at(section_id: int, 
     return call("GET", f"/library/sections/{section_id}/composite/{updated_at}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_compute_path(section_id: int, start_id: int | None = None, end_id: int | None = None, max_distance: float | None = None) -> str:
     """Similar tracks to transition from one to another.
 
@@ -2299,7 +2299,7 @@ def get_library_sections_by_section_id_compute_path(section_id: int, start_id: i
     return call("GET", f"/library/sections/{section_id}/computePath", query={"startID": start_id, "endID": end_id, "maxDistance": max_distance}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_edit(section_id: int) -> str:
     """Edit Section.
 
@@ -2311,7 +2311,7 @@ def get_library_sections_by_section_id_edit(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/edit", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_empty_trash(section_id: int) -> str:
     """Get Empty Trash.
 
@@ -2323,7 +2323,7 @@ def get_library_sections_by_section_id_empty_trash(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/emptyTrash", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_episodes(section_id: int) -> str:
     """Get Section Episodes.
 
@@ -2335,7 +2335,7 @@ def get_library_sections_by_section_id_episodes(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/episodes", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_filters(section_id: int) -> str:
     """Get section filters.
 
@@ -2347,7 +2347,7 @@ def get_library_sections_by_section_id_filters(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/filters", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_first_characters(section_id: int) -> str:
     """Get list of first characters.
 
@@ -2359,7 +2359,7 @@ def get_library_sections_by_section_id_first_characters(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/firstCharacters", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_hubs(section_id: int) -> str:
     """Get Section Hubs.
 
@@ -2371,7 +2371,7 @@ def get_library_sections_by_section_id_hubs(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/hubs", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_label(section_id: int) -> str:
     """Get Section Labels.
 
@@ -2383,7 +2383,7 @@ def get_library_sections_by_section_id_label(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/label", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_location(section_id: int) -> str:
     """Get all folder locations.
 
@@ -2395,7 +2395,7 @@ def get_library_sections_by_section_id_location(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/location", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_match(section_id: int) -> str:
     """Match Section Items.
 
@@ -2407,7 +2407,7 @@ def get_library_sections_by_section_id_match(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/match", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_moment(section_id: int) -> str:
     """Set section moments.
 
@@ -2419,7 +2419,7 @@ def get_library_sections_by_section_id_moment(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/moment", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_movies(section_id: int) -> str:
     """Get Section Movies.
 
@@ -2431,7 +2431,7 @@ def get_library_sections_by_section_id_movies(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/movies", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_nearest(section_id: int, type: int | None = None, values: list | None = None, limit: int | None = None, max_distance: float | None = None) -> str:
     """The nearest audio tracks.
 
@@ -2447,7 +2447,7 @@ def get_library_sections_by_section_id_nearest(section_id: int, type: int | None
     return call("GET", f"/library/sections/{section_id}/nearest", query={"type": type, "values": values, "limit": limit, "maxDistance": max_distance}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_newest(section_id: int) -> str:
     """Get Newest for Section.
 
@@ -2459,7 +2459,7 @@ def get_library_sections_by_section_id_newest(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/newest", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_on_deck(section_id: int) -> str:
     """Get On Deck for Section.
 
@@ -2471,7 +2471,7 @@ def get_library_sections_by_section_id_on_deck(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/onDeck", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_optimize(section_id: int) -> str:
     """Get Optimize Section.
 
@@ -2483,7 +2483,7 @@ def get_library_sections_by_section_id_optimize(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/optimize", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_photos(section_id: int) -> str:
     """Get Section Photos.
 
@@ -2495,7 +2495,7 @@ def get_library_sections_by_section_id_photos(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/photos", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_playlists(section_id: int) -> str:
     """Get Section Playlists.
 
@@ -2507,7 +2507,7 @@ def get_library_sections_by_section_id_playlists(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/playlists", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_prefs(section_id: int, agent: str | None = None) -> str:
     """Get section prefs.
 
@@ -2520,7 +2520,7 @@ def get_library_sections_by_section_id_prefs(section_id: int, agent: str | None 
     return call("GET", f"/library/sections/{section_id}/prefs", query={"agent": agent}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_recently_added(section_id: int) -> str:
     """Get Recently Added for Section.
 
@@ -2532,7 +2532,7 @@ def get_library_sections_by_section_id_recently_added(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/recentlyAdded", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_refresh(section_id: int) -> str:
     """Get Refresh Section.
 
@@ -2544,7 +2544,7 @@ def get_library_sections_by_section_id_refresh(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/refresh", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_search(section_id: int) -> str:
     """Search Section.
 
@@ -2556,7 +2556,7 @@ def get_library_sections_by_section_id_search(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/search", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_settings(section_id: int) -> str:
     """Get Section Settings.
 
@@ -2568,7 +2568,7 @@ def get_library_sections_by_section_id_settings(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/settings", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_shows(section_id: int) -> str:
     """Get Section Shows.
 
@@ -2580,7 +2580,7 @@ def get_library_sections_by_section_id_shows(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/shows", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_sorts(section_id: int) -> str:
     """Get a section sorts.
 
@@ -2592,7 +2592,7 @@ def get_library_sections_by_section_id_sorts(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/sorts", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_tags(section_id: int) -> str:
     """Get Section Tags.
 
@@ -2604,7 +2604,7 @@ def get_library_sections_by_section_id_tags(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/tags", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_timeline(section_id: int) -> str:
     """Get Section Timeline.
 
@@ -2616,7 +2616,7 @@ def get_library_sections_by_section_id_timeline(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/timeline", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_unmatch(section_id: int) -> str:
     """Unmatch Section Items.
 
@@ -2628,7 +2628,7 @@ def get_library_sections_by_section_id_unmatch(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/unmatch", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_sections_by_section_id_unwatched(section_id: int) -> str:
     """Get Unwatched for Section.
 
@@ -2640,7 +2640,7 @@ def get_library_sections_by_section_id_unwatched(section_id: int) -> str:
     return call("GET", f"/library/sections/{section_id}/unwatched", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_streams_by_stream_id_ext(stream_id: int, ext: str, encoding: str | None = None, format: str | None = None, auto_adjust_subtitle: str | None = None) -> str:
     """Get a stream.
 
@@ -2656,7 +2656,7 @@ def get_library_streams_by_stream_id_ext(stream_id: int, ext: str, encoding: str
     return call("GET", f"/library/streams/{stream_id}.{ext}", query={"encoding": encoding, "format": format, "autoAdjustSubtitle": auto_adjust_subtitle}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_streams_by_stream_id_levels(stream_id: int, subsample: int | None = None) -> str:
     """Get loudness about a stream in json.
 
@@ -2669,7 +2669,7 @@ def get_library_streams_by_stream_id_levels(stream_id: int, subsample: int | Non
     return call("GET", f"/library/streams/{stream_id}/levels", query={"subsample": subsample}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_library_streams_by_stream_id_loudness(stream_id: int, subsample: int | None = None) -> str:
     """Get loudness about a stream.
 
@@ -2682,7 +2682,7 @@ def get_library_streams_by_stream_id_loudness(stream_id: int, subsample: int | N
     return call("GET", f"/library/streams/{stream_id}/loudness", query={"subsample": subsample}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_livetv_dvrs_by_dvr_id(dvr_id: int) -> str:
     """Get a single DVR.
 
@@ -2694,7 +2694,7 @@ def get_livetv_dvrs_by_dvr_id(dvr_id: int) -> str:
     return call("GET", f"/livetv/dvrs/{dvr_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_livetv_dvrs_by_dvr_id_channels(dvr_id: int) -> str:
     """Get DVR Channels.
 
@@ -2706,7 +2706,7 @@ def get_livetv_dvrs_by_dvr_id_channels(dvr_id: int) -> str:
     return call("GET", f"/livetv/dvrs/{dvr_id}/channels", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_livetv_dvrs_by_dvr_id_guide(dvr_id: int) -> str:
     """Get DVR Guide.
 
@@ -2718,7 +2718,7 @@ def get_livetv_dvrs_by_dvr_id_guide(dvr_id: int) -> str:
     return call("GET", f"/livetv/dvrs/{dvr_id}/guide", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_livetv_dvrs_by_dvr_id_recordings(dvr_id: int) -> str:
     """Get DVR Recordings by DVR.
 
@@ -2730,7 +2730,7 @@ def get_livetv_dvrs_by_dvr_id_recordings(dvr_id: int) -> str:
     return call("GET", f"/livetv/dvrs/{dvr_id}/recordings", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_livetv_epg_countries_by_country_by_epg_id_lineups(country: str, epg_id: str, postal_code: str | None = None) -> str:
     """Get lineups for a country via postal code.
 
@@ -2744,7 +2744,7 @@ def get_livetv_epg_countries_by_country_by_epg_id_lineups(country: str, epg_id: 
     return call("GET", f"/livetv/epg/countries/{country}/{epg_id}/lineups", query={"postalCode": postal_code}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_livetv_epg_countries_by_country_by_epg_id_regions(country: str, epg_id: str) -> str:
     """Get regions for a country.
 
@@ -2757,7 +2757,7 @@ def get_livetv_epg_countries_by_country_by_epg_id_regions(country: str, epg_id: 
     return call("GET", f"/livetv/epg/countries/{country}/{epg_id}/regions", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_livetv_epg_countries_by_country_by_epg_id_regions_by_region_lineups(country: str, epg_id: str, region: str) -> str:
     """Get lineups for a region.
 
@@ -2771,7 +2771,7 @@ def get_livetv_epg_countries_by_country_by_epg_id_regions_by_region_lineups(coun
     return call("GET", f"/livetv/epg/countries/{country}/{epg_id}/regions/{region}/lineups", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_livetv_sessions_by_session_id(session_id: str) -> str:
     """Get a single session.
 
@@ -2783,7 +2783,7 @@ def get_livetv_sessions_by_session_id(session_id: str) -> str:
     return call("GET", f"/livetv/sessions/{session_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_livetv_sessions_by_session_id_by_consumer_id_by_segment_id(session_id: str, consumer_id: str, segment_id: str) -> str:
     """Get a single session segment.
 
@@ -2797,7 +2797,7 @@ def get_livetv_sessions_by_session_id_by_consumer_id_by_segment_id(session_id: s
     return call("GET", f"/livetv/sessions/{session_id}/{consumer_id}/{segment_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_livetv_sessions_by_session_id_by_consumer_id_index_m3u8(session_id: str, consumer_id: str) -> str:
     """Get a session playlist index.
 
@@ -2810,7 +2810,7 @@ def get_livetv_sessions_by_session_id_by_consumer_id_index_m3u8(session_id: str,
     return call("GET", f"/livetv/sessions/{session_id}/{consumer_id}/index.m3u8", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_media_grabbers_devices_by_device_id(device_id: int) -> str:
     """Get device details.
 
@@ -2822,7 +2822,7 @@ def get_media_grabbers_devices_by_device_id(device_id: int) -> str:
     return call("GET", f"/media/grabbers/devices/{device_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_media_grabbers_devices_by_device_id_channels(device_id: int) -> str:
     """Get a device's channels.
 
@@ -2834,7 +2834,7 @@ def get_media_grabbers_devices_by_device_id_channels(device_id: int) -> str:
     return call("GET", f"/media/grabbers/devices/{device_id}/channels", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_media_grabbers_devices_by_device_id_thumb_by_version(device_id: int, version: int) -> str:
     """Get device thumb.
 
@@ -2847,7 +2847,7 @@ def get_media_grabbers_devices_by_device_id_thumb_by_version(device_id: int, ver
     return call("GET", f"/media/grabbers/devices/{device_id}/thumb/{version}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_media_subscriptions_by_subscription_id(subscription_id: int, include_grabs: str | None = None, include_storage: str | None = None) -> str:
     """Get a single subscription.
 
@@ -2861,7 +2861,7 @@ def get_media_subscriptions_by_subscription_id(subscription_id: int, include_gra
     return call("GET", f"/media/subscriptions/{subscription_id}", query={"includeGrabs": include_grabs, "includeStorage": include_storage}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_pins_by_pin_id(pin_id: int) -> str:
     """Get OAuth PIN Status.
 
@@ -2873,7 +2873,7 @@ def get_pins_by_pin_id(pin_id: int) -> str:
     return call("GET", f"/pins/{pin_id}", query=None, body=None, form=None, host='https://plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_play_queues_by_play_queue_id(play_queue_id: int, own: str | None = None, center: str | None = None, window: int | None = None, include_before: str | None = None, include_after: str | None = None) -> str:
     """Retrieve a play queue.
 
@@ -2890,7 +2890,7 @@ def get_play_queues_by_play_queue_id(play_queue_id: int, own: str | None = None,
     return call("GET", f"/playQueues/{play_queue_id}", query={"own": own, "center": center, "window": window, "includeBefore": include_before, "includeAfter": include_after}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_playlists_by_playlist_id(playlist_id: int) -> str:
     """Retrieve Playlist.
 
@@ -2902,7 +2902,7 @@ def get_playlists_by_playlist_id(playlist_id: int) -> str:
     return call("GET", f"/playlists/{playlist_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_playlists_by_playlist_id_generators(playlist_id: int) -> str:
     """Get a playlist's generators.
 
@@ -2914,7 +2914,7 @@ def get_playlists_by_playlist_id_generators(playlist_id: int) -> str:
     return call("GET", f"/playlists/{playlist_id}/generators", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_playlists_by_playlist_id_items(playlist_id: int, type: list | None = None) -> str:
     """Retrieve Playlist Contents.
 
@@ -2927,7 +2927,7 @@ def get_playlists_by_playlist_id_items(playlist_id: int, type: list | None = Non
     return call("GET", f"/playlists/{playlist_id}/items", query={"type": type}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_playlists_by_playlist_id_items_by_generator_id(playlist_id: int, generator_id: int) -> str:
     """Get a playlist generator.
 
@@ -2940,7 +2940,7 @@ def get_playlists_by_playlist_id_items_by_generator_id(playlist_id: int, generat
     return call("GET", f"/playlists/{playlist_id}/items/{generator_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_playlists_by_playlist_id_items_by_generator_id_items(playlist_id: int, generator_id: int) -> str:
     """Get a playlist generator's items.
 
@@ -2953,7 +2953,7 @@ def get_playlists_by_playlist_id_items_by_generator_id_items(playlist_id: int, g
     return call("GET", f"/playlists/{playlist_id}/items/{generator_id}/items", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_servers_by_machine_id(machine_id: str) -> str:
     """Get Server Details.
 
@@ -2965,7 +2965,7 @@ def get_servers_by_machine_id(machine_id: str) -> str:
     return call("GET", f"/servers/{machine_id}", query=None, body=None, form=None, host='https://plex.tv/api')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_services_browse_by_base64path(base64path: str) -> str:
     """Browse Filesystem Path.
 
@@ -2977,7 +2977,7 @@ def get_services_browse_by_base64path(base64path: str) -> str:
     return call("GET", f"/services/browse/{base64path}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_status_sessions_history_by_history_id(history_id: int) -> str:
     """Get Single History Item.
 
@@ -2989,7 +2989,7 @@ def get_status_sessions_history_by_history_id(history_id: int) -> str:
     return call("GET", f"/status/sessions/history/{history_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_sync_items_by_sync_id(sync_id: int) -> str:
     """Get Sync Item.
 
@@ -3001,7 +3001,7 @@ def get_sync_items_by_sync_id(sync_id: int) -> str:
     return call("GET", f"/sync/items/{sync_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_system_agents_by_agent_id(agent_id: str) -> str:
     """Get Metadata Agent Details.
 
@@ -3013,7 +3013,7 @@ def get_system_agents_by_agent_id(agent_id: str) -> str:
     return call("GET", f"/system/agents/{agent_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def get_user_by_uuid_settings_opt_outs(uuid: str) -> str:
     """Get User Opt-Outs.
 
@@ -3025,7 +3025,7 @@ def get_user_by_uuid_settings_opt_outs(uuid: str) -> str:
     return call("GET", f"/user/{uuid}/settings/opt_outs", query=None, body=None, form=None, host='https://plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_accounts() -> str:
     """Get System Accounts.
 
@@ -3034,7 +3034,7 @@ def list_accounts() -> str:
     return call("GET", "/accounts", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_activities() -> str:
     """Get all activities.
 
@@ -3043,7 +3043,7 @@ def list_activities() -> str:
     return call("GET", "/activities", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_auth_keys() -> str:
     """Get Auth Keys.
 
@@ -3052,7 +3052,7 @@ def list_auth_keys() -> str:
     return call("GET", "/auth/keys", query=None, body=None, form=None, host='https://clients.plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_auth_nonce() -> str:
     """Get Auth Nonce.
 
@@ -3061,7 +3061,7 @@ def list_auth_nonce() -> str:
     return call("GET", "/auth/nonce", query=None, body=None, form=None, host='https://clients.plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_butler() -> str:
     """Get all Butler tasks.
 
@@ -3070,7 +3070,7 @@ def list_butler() -> str:
     return call("GET", "/butler", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_claim_token_json() -> str:
     """Get Claim Token.
 
@@ -3079,7 +3079,7 @@ def list_claim_token_json() -> str:
     return call("GET", "/claim/token.json", query=None, body=None, form=None, host='https://plex.tv/api')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_clients() -> str:
     """Get Clients.
 
@@ -3088,7 +3088,7 @@ def list_clients() -> str:
     return call("GET", "/clients", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_cloud_server() -> str:
     """Get Cloud Server.
 
@@ -3097,7 +3097,7 @@ def list_cloud_server() -> str:
     return call("GET", "/cloud_server", query=None, body=None, form=None, host='https://plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_devices() -> str:
     """Get System Devices.
 
@@ -3106,7 +3106,7 @@ def list_devices() -> str:
     return call("GET", "/devices", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_diagnostics() -> str:
     """Get Diagnostics.
 
@@ -3115,7 +3115,7 @@ def list_diagnostics() -> str:
     return call("GET", "/diagnostics", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_diagnostics_databases() -> str:
     """Download Database Diagnostics.
 
@@ -3124,7 +3124,7 @@ def list_diagnostics_databases() -> str:
     return call("GET", "/diagnostics/databases", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_diagnostics_logs() -> str:
     """Download Log Bundle.
 
@@ -3133,7 +3133,7 @@ def list_diagnostics_logs() -> str:
     return call("GET", "/diagnostics/logs", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_eventsource_notifications(filter: list | None = None) -> str:
     """Connect to Eventsource.
 
@@ -3150,7 +3150,7 @@ def list_eventsource_notifications(filter: list | None = None) -> str:
     return call("GET", "/:/eventsource/notifications", query={"filter": filter}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_features() -> str:
     """Get Features.
 
@@ -3159,7 +3159,7 @@ def list_features() -> str:
     return call("GET", "/features", query=None, body=None, form=None, host='https://plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_friends() -> str:
     """Get Friends.
 
@@ -3168,7 +3168,7 @@ def list_friends() -> str:
     return call("GET", "/friends", query=None, body=None, form=None, host='https://plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_geoip() -> str:
     """Get GeoIP.
 
@@ -3177,7 +3177,7 @@ def list_geoip() -> str:
     return call("GET", "/geoip", query=None, body=None, form=None, host='https://plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_home() -> str:
     """Get home hubs.
 
@@ -3186,7 +3186,7 @@ def list_home() -> str:
     return call("GET", "/home", query=None, body=None, form=None, host='https://plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_home_users() -> str:
     """Get home hubs Users.
 
@@ -3195,7 +3195,7 @@ def list_home_users() -> str:
     return call("GET", "/home/users", query=None, body=None, form=None, host='https://plex.tv/api')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_hubs(only_transient: str | None = None, identifier: list | None = None) -> str:
     """Get global hubs.
 
@@ -3208,7 +3208,7 @@ def list_hubs(only_transient: str | None = None, identifier: list | None = None)
     return call("GET", "/hubs", query={"onlyTransient": only_transient, "identifier": identifier}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_hubs_continue_watching() -> str:
     """Get the continue watching hub.
 
@@ -3217,7 +3217,7 @@ def list_hubs_continue_watching() -> str:
     return call("GET", "/hubs/continueWatching", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_hubs_continue_watching_items() -> str:
     """Get Continue Watching Items.
 
@@ -3226,7 +3226,7 @@ def list_hubs_continue_watching_items() -> str:
     return call("GET", "/hubs/continueWatching/items", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_hubs_home_recently_added() -> str:
     """Get home hubs Recently Added.
 
@@ -3235,7 +3235,7 @@ def list_hubs_home_recently_added() -> str:
     return call("GET", "/hubs/home/recentlyAdded", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_hubs_items(identifier: list | None = None) -> str:
     """Get a hub's items.
 
@@ -3247,7 +3247,7 @@ def list_hubs_items(identifier: list | None = None) -> str:
     return call("GET", "/hubs/items", query={"identifier": identifier}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_hubs_promoted() -> str:
     """Get the hubs which are promoted.
 
@@ -3256,7 +3256,7 @@ def list_hubs_promoted() -> str:
     return call("GET", "/hubs/promoted", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_hubs_search(query: str | None = None, section_id: int | None = None, limit: int | None = None, include_collections: bool | None = None) -> str:
     """Search Hub.
 
@@ -3271,7 +3271,7 @@ def list_hubs_search(query: str | None = None, section_id: int | None = None, li
     return call("GET", "/hubs/search", query={"query": query, "sectionId": section_id, "limit": limit, "includeCollections": include_collections}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_hubs_search_voice(query: str | None = None, limit: int | None = None, include_collections: bool | None = None) -> str:
     """Voice Search Hub.
 
@@ -3285,7 +3285,7 @@ def list_hubs_search_voice(query: str | None = None, limit: int | None = None, i
     return call("GET", "/hubs/search/voice", query={"query": query, "limit": limit, "includeCollections": include_collections}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_identity() -> str:
     """Get PMS identity.
 
@@ -3294,7 +3294,7 @@ def list_identity() -> str:
     return call("GET", "/identity", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_ip() -> str:
     """Get IP.
 
@@ -3303,7 +3303,7 @@ def list_ip() -> str:
     return call("GET", "/ip", query=None, body=None, form=None, host='https://plex.tv')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_library() -> str:
     """Get Root Library.
 
@@ -3312,7 +3312,7 @@ def list_library() -> str:
     return call("GET", "/library", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_library_all() -> str:
     """Get all items in library.
 
@@ -3321,7 +3321,7 @@ def list_library_all() -> str:
     return call("GET", "/library/all", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_library_matches(include_full_metadata: str | None = None, include_ancestor_metadata: str | None = None, include_alternate_metadata_sources: str | None = None, guid: str | None = None, year: int | None = None, path: str | None = None, grandparent_title: str | None = None, grandparent_year: int | None = None, parent_index: int | None = None, index: int | None = None, originally_available_at: str | None = None, parent_title: str | None = None) -> str:
     """Get library matches.
 
@@ -3344,7 +3344,7 @@ def list_library_matches(include_full_metadata: str | None = None, include_ances
     return call("GET", "/library/matches", query={"includeFullMetadata": include_full_metadata, "includeAncestorMetadata": include_ancestor_metadata, "includeAlternateMetadataSources": include_alternate_metadata_sources, "guid": guid, "year": year, "path": path, "grandparentTitle": grandparent_title, "grandparentYear": grandparent_year, "parentIndex": parent_index, "index": index, "originallyAvailableAt": originally_available_at, "parentTitle": parent_title}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_library_optimize() -> str:
     """Get Optimize Library.
 
@@ -3353,7 +3353,7 @@ def list_library_optimize() -> str:
     return call("GET", "/library/optimize", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_library_random_artwork(sections: list | None = None) -> str:
     """Get random artwork.
 
@@ -3365,7 +3365,7 @@ def list_library_random_artwork(sections: list | None = None) -> str:
     return call("GET", "/library/randomArtwork", query={"sections": sections}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_library_recently_added() -> str:
     """Get Global Recently Added.
 
@@ -3374,7 +3374,7 @@ def list_library_recently_added() -> str:
     return call("GET", "/library/recentlyAdded", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_library_search(query: str | None = None, limit: int | None = None, search_types: str | None = None, search_providers: str | None = None, include_metadata: int | None = None) -> str:
     """Search Discover.
 
@@ -3390,7 +3390,7 @@ def list_library_search(query: str | None = None, limit: int | None = None, sear
     return call("GET", "/library/search", query={"query": query, "limit": limit, "searchTypes": search_types, "searchProviders": search_providers, "includeMetadata": include_metadata}, body=None, form=None, host='https://discover.provider.plex.tv')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_library_sections() -> str:
     """Get Library Sections (Fallback).
 
@@ -3399,7 +3399,7 @@ def list_library_sections() -> str:
     return call("GET", "/library/sections/", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_library_sections_all() -> str:
     """Get library sections (main Media Provider Only).
 
@@ -3408,7 +3408,7 @@ def list_library_sections_all() -> str:
     return call("GET", "/library/sections/all", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_library_sections_prefs(type: int | None = None, agent: str | None = None) -> str:
     """Get section prefs.
 
@@ -3421,7 +3421,7 @@ def list_library_sections_prefs(type: int | None = None, agent: str | None = Non
     return call("GET", "/library/sections/prefs", query={"type": type, "agent": agent}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_library_sections_watchlist_all() -> str:
     """Get Watchlist.
 
@@ -3430,7 +3430,7 @@ def list_library_sections_watchlist_all() -> str:
     return call("GET", "/library/sections/watchlist/all", query=None, body=None, form=None, host='https://discover.provider.plex.tv')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_library_tags() -> str:
     """Get all library tags of a type.
 
@@ -3439,7 +3439,7 @@ def list_library_tags() -> str:
     return call("GET", "/library/tags", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_livetv_dvrs(uuid: str | None = None, lineup: str | None = None) -> str:
     """Get DVRs.
 
@@ -3452,7 +3452,7 @@ def list_livetv_dvrs(uuid: str | None = None, lineup: str | None = None) -> str:
     return call("GET", "/livetv/dvrs", query={"uuid": uuid, "lineup": lineup}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_livetv_epg_channelmap(device: str | None = None, lineup: str | None = None) -> str:
     """Compute the best channel map.
 
@@ -3465,7 +3465,7 @@ def list_livetv_epg_channelmap(device: str | None = None, lineup: str | None = N
     return call("GET", "/livetv/epg/channelmap", query={"device": device, "lineup": lineup}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_livetv_epg_channels(lineup: str | None = None) -> str:
     """Get channels for a lineup.
 
@@ -3477,7 +3477,7 @@ def list_livetv_epg_channels(lineup: str | None = None) -> str:
     return call("GET", "/livetv/epg/channels", query={"lineup": lineup}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_livetv_epg_countries() -> str:
     """Get all countries.
 
@@ -3486,7 +3486,7 @@ def list_livetv_epg_countries() -> str:
     return call("GET", "/livetv/epg/countries", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_livetv_epg_guide() -> str:
     """Get EPG Guide.
 
@@ -3495,7 +3495,7 @@ def list_livetv_epg_guide() -> str:
     return call("GET", "/livetv/epg/guide", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_livetv_epg_languages() -> str:
     """Get all languages.
 
@@ -3504,7 +3504,7 @@ def list_livetv_epg_languages() -> str:
     return call("GET", "/livetv/epg/languages", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_livetv_epg_lineup(device: str | None = None, lineup_group: str | None = None) -> str:
     """Compute the best lineup.
 
@@ -3517,7 +3517,7 @@ def list_livetv_epg_lineup(device: str | None = None, lineup_group: str | None =
     return call("GET", "/livetv/epg/lineup", query={"device": device, "lineupGroup": lineup_group}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_livetv_epg_lineupchannels(lineup: list | None = None) -> str:
     """Get the channels for multiple lineups.
 
@@ -3529,7 +3529,7 @@ def list_livetv_epg_lineupchannels(lineup: list | None = None) -> str:
     return call("GET", "/livetv/epg/lineupchannels", query={"lineup": lineup}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_livetv_epg_search() -> str:
     """Search EPG.
 
@@ -3538,7 +3538,7 @@ def list_livetv_epg_search() -> str:
     return call("GET", "/livetv/epg/search", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_livetv_recordings() -> str:
     """Get DVR Recordings.
 
@@ -3547,7 +3547,7 @@ def list_livetv_recordings() -> str:
     return call("GET", "/livetv/recordings", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_livetv_sessions(dvr_id: int | None = None, channel: int | None = None) -> str:
     """Get all sessions.
 
@@ -3560,7 +3560,7 @@ def list_livetv_sessions(dvr_id: int | None = None, channel: int | None = None) 
     return call("GET", "/livetv/sessions", query={"dvrId": dvr_id, "channel": channel}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_media_grabbers(protocol: str | None = None) -> str:
     """Get available grabbers.
 
@@ -3572,7 +3572,7 @@ def list_media_grabbers(protocol: str | None = None) -> str:
     return call("GET", "/media/grabbers", query={"protocol": protocol}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_media_grabbers_devices() -> str:
     """Get all devices.
 
@@ -3581,7 +3581,7 @@ def list_media_grabbers_devices() -> str:
     return call("GET", "/media/grabbers/devices", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_media_grabbers_devices_discover(protocol: str | None = None, grabber_identifier: str | None = None) -> str:
     """Tell grabbers to discover devices.
 
@@ -3594,7 +3594,7 @@ def list_media_grabbers_devices_discover(protocol: str | None = None, grabber_id
     return call("GET", "/media/grabbers/devices/discover", query={"protocol": protocol, "grabberIdentifier": grabber_identifier}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_media_providers() -> str:
     """Get the list of available media providers.
 
@@ -3603,7 +3603,7 @@ def list_media_providers() -> str:
     return call("GET", "/media/providers", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_media_subscriptions(include_grabs: str | None = None, include_storage: str | None = None) -> str:
     """Get all subscriptions.
 
@@ -3616,7 +3616,7 @@ def list_media_subscriptions(include_grabs: str | None = None, include_storage: 
     return call("GET", "/media/subscriptions", query={"includeGrabs": include_grabs, "includeStorage": include_storage}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_media_subscriptions_scheduled() -> str:
     """Get all scheduled recordings.
 
@@ -3625,7 +3625,7 @@ def list_media_subscriptions_scheduled() -> str:
     return call("GET", "/media/subscriptions/scheduled", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_media_subscriptions_template(guid: str | None = None, type: str | None = None, target_library_section_id: int | None = None) -> str:
     """Get the subscription template.
 
@@ -3639,7 +3639,7 @@ def list_media_subscriptions_template(guid: str | None = None, type: str | None 
     return call("GET", "/media/subscriptions/template", query={"guid": guid, "type": type, "targetLibrarySectionID": target_library_section_id}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_music_transcode() -> str:
     """Transcode Music.
 
@@ -3648,7 +3648,7 @@ def list_music_transcode() -> str:
     return call("GET", "/music/:/transcode", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_myplex_account() -> str:
     """Get MyPlex Account.
 
@@ -3657,7 +3657,7 @@ def list_myplex_account() -> str:
     return call("GET", "/myplex/account", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_photo_transcode(url: str | None = None, format: str | None = None, width: int | None = None, height: int | None = None, quality: int | None = None, background: str | None = None, upscale: str | None = None, min_size: str | None = None, rotate: str | None = None, blur: int | None = None, saturation: int | None = None, opacity: int | None = None, chroma_subsampling: int | None = None, blend_color: str | None = None) -> str:
     """Transcode an image.
 
@@ -3687,7 +3687,7 @@ Defaults to 3 (444)
     return call("GET", "/photo/:/transcode", query={"url": url, "format": format, "width": width, "height": height, "quality": quality, "background": background, "upscale": upscale, "minSize": min_size, "rotate": rotate, "blur": blur, "saturation": saturation, "opacity": opacity, "chromaSubsampling": chroma_subsampling, "blendColor": blend_color}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_ping() -> str:
     """Ping the server.
 
@@ -3696,7 +3696,7 @@ def list_ping() -> str:
     return call("GET", "/ping", query=None, body=None, form=None, host='https://plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_play_queues_1() -> str:
     """Get Conversion Queue.
 
@@ -3705,7 +3705,7 @@ def list_play_queues_1() -> str:
     return call("GET", "/playQueues/1", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_player_resources() -> str:
     """Get Client Resources.
 
@@ -3714,7 +3714,7 @@ def list_player_resources() -> str:
     return call("GET", "/player/resources", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_player_timeline_poll() -> str:
     """Player Poll Timeline.
 
@@ -3723,7 +3723,7 @@ def list_player_timeline_poll() -> str:
     return call("GET", "/player/timeline/poll", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_playlists(playlist_type: str | None = None, type: int | None = None) -> str:
     """List playlists.
 
@@ -3736,7 +3736,7 @@ def list_playlists(playlist_type: str | None = None, type: int | None = None) ->
     return call("GET", "/playlists", query={"playlistType": playlist_type, "type": type}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_prefs() -> str:
     """Get all preferences.
 
@@ -3745,7 +3745,7 @@ def list_prefs() -> str:
     return call("GET", "/:/prefs", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_prefs_get(id: str | None = None) -> str:
     """Get a preferences.
 
@@ -3757,7 +3757,7 @@ def list_prefs_get(id: str | None = None) -> str:
     return call("GET", "/:/prefs/get", query={"id": id}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_progress(key: str | None = None, time: int | None = None) -> str:
     """Get Progress.
 
@@ -3770,7 +3770,7 @@ def list_progress(key: str | None = None, time: int | None = None) -> str:
     return call("GET", "/:/progress", query={"key": key, "time": time}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_resources() -> str:
     """Get Legacy Resources.
 
@@ -3779,7 +3779,7 @@ def list_resources() -> str:
     return call("GET", "/api/resources", query=None, body=None, form=None, host='https://plex.tv/api')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_resources_2(include_https: str | None = None, include_relay: str | None = None, include_ipv6: str | None = None) -> str:
     """Get Server Resources.
 
@@ -3794,7 +3794,7 @@ E.g: https://10-0-0-25.bbf8e10c7fa20447cacee74cd9914cde.plex.direct:32400
     return call("GET", "/resources", query={"includeHttps": include_https, "includeRelay": include_relay, "includeIPv6": include_ipv6}, body=None, form=None, host='https://plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_root() -> str:
     """Get PMS info.
 
@@ -3803,7 +3803,7 @@ def list_root() -> str:
     return call("GET", "/", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_security_resources(source: str | None = None, refresh: str | None = None) -> str:
     """Get Source Connection Information.
 
@@ -3816,7 +3816,7 @@ def list_security_resources(source: str | None = None, refresh: str | None = Non
     return call("GET", "/security/resources", query={"source": source, "refresh": refresh}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_server() -> str:
     """Get User Server Association.
 
@@ -3825,7 +3825,7 @@ def list_server() -> str:
     return call("GET", "/server", query=None, body=None, form=None, host='https://plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_server_access_tokens() -> str:
     """Get Server Access Tokens.
 
@@ -3834,7 +3834,7 @@ def list_server_access_tokens() -> str:
     return call("GET", "/server/access_tokens", query=None, body=None, form=None, host='https://plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_server_users_features() -> str:
     """Get Server User Features.
 
@@ -3843,7 +3843,7 @@ def list_server_users_features() -> str:
     return call("GET", "/server/users/features", query=None, body=None, form=None, host='https://plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_servers() -> str:
     """Get Local Servers.
 
@@ -3852,7 +3852,7 @@ def list_servers() -> str:
     return call("GET", "/servers", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_services_browse(include_files: str | None = None) -> str:
     """Browse Filesystem.
 
@@ -3864,7 +3864,7 @@ def list_services_browse(include_files: str | None = None) -> str:
     return call("GET", "/services/browse", query={"includeFiles": include_files}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_services_ultrablur_colors(url: str | None = None) -> str:
     """Get UltraBlur Colors.
 
@@ -3876,7 +3876,7 @@ def list_services_ultrablur_colors(url: str | None = None) -> str:
     return call("GET", "/services/ultrablur/colors", query={"url": url}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_services_ultrablur_image(top_left: str | None = None, top_right: str | None = None, bottom_right: str | None = None, bottom_left: str | None = None, width: int | None = None, height: int | None = None, noise: str | None = None) -> str:
     """Get UltraBlur Image.
 
@@ -3894,7 +3894,7 @@ def list_services_ultrablur_image(top_left: str | None = None, top_right: str | 
     return call("GET", "/services/ultrablur/image", query={"topLeft": top_left, "topRight": top_right, "bottomRight": bottom_right, "bottomLeft": bottom_left, "width": width, "height": height, "noise": noise}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_statistics_bandwidth(timespan: int | None = None, account_id: int | None = None, device_id: int | None = None, lan: str | None = None) -> str:
     """Get Bandwidth Statistics.
 
@@ -3909,7 +3909,7 @@ def list_statistics_bandwidth(timespan: int | None = None, account_id: int | Non
     return call("GET", "/statistics/bandwidth", query={"timespan": timespan, "accountID": account_id, "deviceID": device_id, "lan": lan}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_statistics_resources() -> str:
     """Get Resource Statistics.
 
@@ -3918,7 +3918,7 @@ def list_statistics_resources() -> str:
     return call("GET", "/statistics/resources", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_status_sessions() -> str:
     """List Sessions.
 
@@ -3927,7 +3927,7 @@ def list_status_sessions() -> str:
     return call("GET", "/status/sessions", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_status_sessions_background() -> str:
     """Get background tasks.
 
@@ -3936,7 +3936,7 @@ def list_status_sessions_background() -> str:
     return call("GET", "/status/sessions/background", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_status_sessions_history_all(account_id: int | None = None, viewed_at: int | None = None, library_section_id: int | None = None, metadata_item_id: int | None = None, sort: list | None = None, exclude_elements: str | None = None, exclude_fields: str | None = None, include_fields: str | None = None, include_elements: str | None = None, viewed_at_query: int | None = None, viewed_at_query_2: int | None = None, device_id: int | None = None) -> str:
     """List Playback History.
 
@@ -3959,7 +3959,7 @@ def list_status_sessions_history_all(account_id: int | None = None, viewed_at: i
     return call("GET", "/status/sessions/history/all", query={"accountID": account_id, "viewedAt": viewed_at, "librarySectionID": library_section_id, "metadataItemID": metadata_item_id, "sort": sort, "excludeElements": exclude_elements, "excludeFields": exclude_fields, "includeFields": include_fields, "includeElements": include_elements, "viewedAt>": viewed_at_query, "viewedAt<": viewed_at_query_2, "deviceID": device_id}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_sync() -> str:
     """Get Sync Status.
 
@@ -3968,7 +3968,7 @@ def list_sync() -> str:
     return call("GET", "/sync", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_sync_items() -> str:
     """Get Sync Items.
 
@@ -3977,7 +3977,7 @@ def list_sync_items() -> str:
     return call("GET", "/sync/items", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_sync_queue() -> str:
     """Get Sync Queue.
 
@@ -3986,7 +3986,7 @@ def list_sync_queue() -> str:
     return call("GET", "/sync/queue", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_sync_transcode_queue() -> str:
     """Get Sync Transcode Queue.
 
@@ -3995,7 +3995,7 @@ def list_sync_transcode_queue() -> str:
     return call("GET", "/sync/transcodeQueue", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_system_agents() -> str:
     """Get Metadata Agents.
 
@@ -4004,7 +4004,7 @@ def list_system_agents() -> str:
     return call("GET", "/system/agents", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_system_settings() -> str:
     """Get System Settings.
 
@@ -4013,7 +4013,7 @@ def list_system_settings() -> str:
     return call("GET", "/system/settings", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_system_updates() -> str:
     """Check for System Updates.
 
@@ -4022,7 +4022,7 @@ def list_system_updates() -> str:
     return call("GET", "/system/updates", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_transcode_sessions() -> str:
     """Get Transcode Sessions.
 
@@ -4031,7 +4031,7 @@ def list_transcode_sessions() -> str:
     return call("GET", "/transcode/sessions", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_updater_status() -> str:
     """Querying status of updates.
 
@@ -4040,7 +4040,7 @@ def list_updater_status() -> str:
     return call("GET", "/updater/status", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_user() -> str:
     """Get Token Details.
 
@@ -4049,7 +4049,7 @@ def list_user() -> str:
     return call("GET", "/user", query=None, body=None, form=None, host='https://plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_users() -> str:
     """Get Legacy Users.
 
@@ -4058,7 +4058,7 @@ def list_users() -> str:
     return call("GET", "/api/users/", query=None, body=None, form=None, host='https://plex.tv/api')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_users_2() -> str:
     """Get list of all connected users.
 
@@ -4067,7 +4067,7 @@ def list_users_2() -> str:
     return call("GET", "/users", query=None, body=None, form=None, host='https://plex.tv/api')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_users_account() -> str:
     """Get Account (XML).
 
@@ -4076,7 +4076,7 @@ def list_users_account() -> str:
     return call("GET", "/users/account", query=None, body=None, form=None, host='https://plex.tv')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_users_account_json() -> str:
     """Get Account (JSON).
 
@@ -4085,7 +4085,7 @@ def list_users_account_json() -> str:
     return call("GET", "/users/account.json", query=None, body=None, form=None, host='https://plex.tv')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_v2_user_webhooks() -> str:
     """User Webhooks.
 
@@ -4094,7 +4094,7 @@ def list_v2_user_webhooks() -> str:
     return call("GET", "/api/v2/user/webhooks", query=None, body=None, form=None, host='https://plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_webhooks() -> str:
     """Get Webhooks.
 
@@ -4103,7 +4103,7 @@ def list_webhooks() -> str:
     return call("GET", "/webhooks", query=None, body=None, form=None, host='https://plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_websocket_notifications(filter: list | None = None) -> str:
     """Connect to WebSocket.
 
@@ -4120,7 +4120,7 @@ def list_websocket_notifications(filter: list | None = None) -> str:
     return call("GET", "/:/websocket/notifications", query={"filter": filter}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_READ)
+@operation(_READ)
 def list_websockets_notifications() -> str:
     """Get WebSocket Notifications.
 
@@ -4129,7 +4129,7 @@ def list_websockets_notifications() -> str:
     return call("GET", "/:/websockets/notifications", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def patch_livetv_dvrs_by_dvr_id(dvr_id: int) -> str:
     """Update DVR Settings.
 
@@ -4141,7 +4141,7 @@ def patch_livetv_dvrs_by_dvr_id(dvr_id: int) -> str:
     return call("PATCH", f"/livetv/dvrs/{dvr_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_actions_remove_from_continue_watching(key: str | None = None) -> str:
     """Remove From Continue Watching.
 
@@ -4153,7 +4153,7 @@ def update_actions_remove_from_continue_watching(key: str | None = None) -> str:
     return call("PUT", "/actions/removeFromContinueWatching", query={"key": key}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_home_users_by_user_id(user_id: int) -> str:
     """Update Home User.
 
@@ -4165,7 +4165,7 @@ def update_home_users_by_user_id(user_id: int) -> str:
     return call("PUT", f"/home/users/{user_id}", query=None, body=None, form=None, host='https://plex.tv/api')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_home_users_restricted_by_user_id(user_id: int) -> str:
     """Update Restricted User.
 
@@ -4177,7 +4177,7 @@ def update_home_users_restricted_by_user_id(user_id: int) -> str:
     return call("PUT", f"/home/users/restricted/{user_id}", query=None, body=None, form=None, host='https://plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_hubs_sections_by_section_id_manage_by_identifier(section_id: int, identifier: str, promoted_to_recommended: str | None = None, promoted_to_own_home: str | None = None, promoted_to_shared_home: str | None = None) -> str:
     """Change hub visibility.
 
@@ -4193,7 +4193,7 @@ def update_hubs_sections_by_section_id_manage_by_identifier(section_id: int, ide
     return call("PUT", f"/hubs/sections/{section_id}/manage/{identifier}", query={"promotedToRecommended": promoted_to_recommended, "promotedToOwnHome": promoted_to_own_home, "promotedToSharedHome": promoted_to_shared_home}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_hubs_sections_by_section_id_manage_move(section_id: int, identifier: str | None = None, after: str | None = None) -> str:
     """Move Hub.
 
@@ -4207,7 +4207,7 @@ def update_hubs_sections_by_section_id_manage_move(section_id: int, identifier: 
     return call("PUT", f"/hubs/sections/{section_id}/manage/move", query={"identifier": identifier, "after": after}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_invites_requests_by_invite_id(invite_id: int, friend: str | None = None, home: str | None = None, server: str | None = None) -> str:
     """Accept an Invite.
 
@@ -4222,7 +4222,7 @@ def update_invites_requests_by_invite_id(invite_id: int, friend: str | None = No
     return call("PUT", f"/api/invites/requests/{invite_id}", query={"friend": friend, "home": home, "server": server}, body=None, form=None, host='https://plex.tv')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_clean_bundles() -> str:
     """Clean bundles.
 
@@ -4231,7 +4231,7 @@ def update_library_clean_bundles() -> str:
     return call("PUT", "/library/clean/bundles", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_collections_by_collection_id_items(collection_id: int, uri: str | None = None) -> str:
     """Add items to a collection.
 
@@ -4244,7 +4244,7 @@ def update_library_collections_by_collection_id_items(collection_id: int, uri: s
     return call("PUT", f"/library/collections/{collection_id}/items", query={"uri": uri}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_collections_by_collection_id_items_by_item_id(collection_id: int, item_id: int) -> str:
     """Update an item in a collection.
 
@@ -4257,7 +4257,7 @@ def update_library_collections_by_collection_id_items_by_item_id(collection_id: 
     return call("PUT", f"/library/collections/{collection_id}/items/{item_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_collections_by_collection_id_items_by_item_id_move(collection_id: int, item_id: int, after: int | None = None) -> str:
     """Reorder an item in the collection.
 
@@ -4271,7 +4271,7 @@ def update_library_collections_by_collection_id_items_by_item_id_move(collection
     return call("PUT", f"/library/collections/{collection_id}/items/{item_id}/move", query={"after": after}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_metadata_by_ids(ids: list, args: dict | None = None) -> str:
     """Edit a metadata item.
 
@@ -4284,7 +4284,7 @@ def update_library_metadata_by_ids(ids: list, args: dict | None = None) -> str:
     return call("PUT", f"/library/metadata/{ids}", query={"args": args}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_metadata_by_ids_addetect(ids: str) -> str:
     """Ad-detect an item.
 
@@ -4296,7 +4296,7 @@ def update_library_metadata_by_ids_addetect(ids: str) -> str:
     return call("PUT", f"/library/metadata/{ids}/addetect", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_metadata_by_ids_analyze(ids: str, thumb_offset: float | None = None, art_offset: float | None = None) -> str:
     """Analyze an item.
 
@@ -4310,7 +4310,7 @@ def update_library_metadata_by_ids_analyze(ids: str, thumb_offset: float | None 
     return call("PUT", f"/library/metadata/{ids}/analyze", query={"thumbOffset": thumb_offset, "artOffset": art_offset}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_metadata_by_ids_by_element(ids: str, element: str, url: str | None = None) -> str:
     """Set an item's artwork, theme, etc.
 
@@ -4324,7 +4324,7 @@ def update_library_metadata_by_ids_by_element(ids: str, element: str, url: str |
     return call("PUT", f"/library/metadata/{ids}/{element}", query={"url": url}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_metadata_by_ids_chapter_thumbs(ids: str, force: str | None = None) -> str:
     """Generate thumbs of chapters for an item.
 
@@ -4337,7 +4337,7 @@ def update_library_metadata_by_ids_chapter_thumbs(ids: str, force: str | None = 
     return call("PUT", f"/library/metadata/{ids}/chapterThumbs", query={"force": force}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_metadata_by_ids_credits(ids: str, force: str | None = None, manual: str | None = None) -> str:
     """Credit detect a metadata item.
 
@@ -4351,7 +4351,7 @@ def update_library_metadata_by_ids_credits(ids: str, force: str | None = None, m
     return call("PUT", f"/library/metadata/{ids}/credits", query={"force": force, "manual": manual}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_metadata_by_ids_index(ids: str, force: str | None = None) -> str:
     """Start BIF generation of an item.
 
@@ -4364,7 +4364,7 @@ def update_library_metadata_by_ids_index(ids: str, force: str | None = None) -> 
     return call("PUT", f"/library/metadata/{ids}/index", query={"force": force}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_metadata_by_ids_intro(ids: str, force: str | None = None, threshold: float | None = None) -> str:
     """Intro detect an item.
 
@@ -4378,7 +4378,7 @@ def update_library_metadata_by_ids_intro(ids: str, force: str | None = None, thr
     return call("PUT", f"/library/metadata/{ids}/intro", query={"force": force, "threshold": threshold}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_metadata_by_ids_marker_by_marker(ids: str, marker: str, type: int | None = None, start_time_offset: int | None = None, end_time_offset: int | None = None, attributes: dict | None = None) -> str:
     """Edit a marker.
 
@@ -4395,7 +4395,7 @@ def update_library_metadata_by_ids_marker_by_marker(ids: str, marker: str, type:
     return call("PUT", f"/library/metadata/{ids}/marker/{marker}", query={"type": type, "startTimeOffset": start_time_offset, "endTimeOffset": end_time_offset, "attributes": attributes}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_metadata_by_ids_match(ids: str, guid: str | None = None, name: str | None = None, year: int | None = None) -> str:
     """Match a metadata item.
 
@@ -4410,7 +4410,7 @@ def update_library_metadata_by_ids_match(ids: str, guid: str | None = None, name
     return call("PUT", f"/library/metadata/{ids}/match", query={"guid": guid, "name": name, "year": year}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_metadata_by_ids_matches(ids: str, title: str | None = None, parent_title: str | None = None, agent: str | None = None, language: str | None = None, year: int | None = None, manual: str | None = None) -> str:
     """Get metadata matches for an item.
 
@@ -4428,7 +4428,7 @@ def update_library_metadata_by_ids_matches(ids: str, title: str | None = None, p
     return call("PUT", f"/library/metadata/{ids}/matches", query={"title": title, "parentTitle": parent_title, "agent": agent, "language": language, "year": year, "manual": manual}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_metadata_by_ids_merge(ids: str, ids_query: list | None = None) -> str:
     """Merge a metadata item.
 
@@ -4441,7 +4441,7 @@ def update_library_metadata_by_ids_merge(ids: str, ids_query: list | None = None
     return call("PUT", f"/library/metadata/{ids}/merge", query={"ids": ids_query}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_metadata_by_ids_prefs(ids: str, args: dict | None = None) -> str:
     """Set metadata preferences.
 
@@ -4454,7 +4454,7 @@ def update_library_metadata_by_ids_prefs(ids: str, args: dict | None = None) -> 
     return call("PUT", f"/library/metadata/{ids}/prefs", query={"args": args}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_metadata_by_ids_refresh(ids: str, agent: str | None = None, mark_updated: str | None = None, skip_refresh: str | None = None) -> str:
     """Refresh a metadata item.
 
@@ -4469,7 +4469,7 @@ def update_library_metadata_by_ids_refresh(ids: str, agent: str | None = None, m
     return call("PUT", f"/library/metadata/{ids}/refresh", query={"agent": agent, "markUpdated": mark_updated, "skipRefresh": skip_refresh}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_metadata_by_ids_split(ids: str) -> str:
     """Split a metadata item.
 
@@ -4481,7 +4481,7 @@ def update_library_metadata_by_ids_split(ids: str) -> str:
     return call("PUT", f"/library/metadata/{ids}/split", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_metadata_by_ids_unmatch(ids: str) -> str:
     """Unmatch a metadata item.
 
@@ -4493,7 +4493,7 @@ def update_library_metadata_by_ids_unmatch(ids: str) -> str:
     return call("PUT", f"/library/metadata/{ids}/unmatch", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_metadata_by_ids_voice_activity(ids: str, force: str | None = None, manual: str | None = None) -> str:
     """Detect voice activity.
 
@@ -4507,7 +4507,7 @@ def update_library_metadata_by_ids_voice_activity(ids: str, force: str | None = 
     return call("PUT", f"/library/metadata/{ids}/voiceActivity", query={"force": force, "manual": manual}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_optimize(async_: str | None = None) -> str:
     """Optimize the Database.
 
@@ -4519,7 +4519,7 @@ def update_library_optimize(async_: str | None = None) -> str:
     return call("PUT", "/library/optimize", query={"async": async_}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_parts_by_part_id(part_id: int, audio_stream_id: int | None = None, subtitle_stream_id: int | None = None, all_parts: str | None = None) -> str:
     """Set stream selection.
 
@@ -4534,7 +4534,7 @@ def update_library_parts_by_part_id(part_id: int, audio_stream_id: int | None = 
     return call("PUT", f"/library/parts/{part_id}", query={"audioStreamID": audio_stream_id, "subtitleStreamID": subtitle_stream_id, "allParts": all_parts}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_sections_by_section_id(section_id: str, name: str | None = None, scanner: str | None = None, agent: str | None = None, metadata_agent_provider_group_id: str | None = None, language: str | None = None, locations: list | None = None, prefs: dict | None = None) -> str:
     """Edit a library section.
 
@@ -4553,7 +4553,7 @@ def update_library_sections_by_section_id(section_id: str, name: str | None = No
     return call("PUT", f"/library/sections/{section_id}", query={"name": name, "scanner": scanner, "agent": agent, "metadataAgentProviderGroupId": metadata_agent_provider_group_id, "language": language, "locations": locations, "prefs": prefs}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_sections_by_section_id_all(section_id: str, type: str | None = None, filters: str | None = None, field_value: str | None = None, field_locked: str | None = None, title_value: str | None = None, artist_title_value: str | None = None, artist_title_id: str | None = None, album_title_value: str | None = None, album_title_id: str | None = None, tagtype_idx_tag_tag: str | None = None, tagtype_idx_tagging_object: str | None = None, tagtype_tag_tag: str | None = None, tagtype_tag: str | None = None) -> str:
     """Set the fields of the filtered items.
 
@@ -4578,7 +4578,7 @@ def update_library_sections_by_section_id_all(section_id: str, type: str | None 
     return call("PUT", f"/library/sections/{section_id}/all", query={"type": type, "filters": filters, "field.value": field_value, "field.locked": field_locked, "title.value": title_value, "artist.title.value": artist_title_value, "artist.title.id": artist_title_id, "album.title.value": album_title_value, "album.title.id": album_title_id, "tagtype[idx].tag.tag": tagtype_idx_tag_tag, "tagtype[idx].tagging.object": tagtype_idx_tagging_object, "tagtype[].tag.tag-": tagtype_tag_tag, "tagtype[].tag": tagtype_tag}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_sections_by_section_id_analyze(section_id: int) -> str:
     """Analyze a section.
 
@@ -4590,7 +4590,7 @@ def update_library_sections_by_section_id_analyze(section_id: int) -> str:
     return call("PUT", f"/library/sections/{section_id}/analyze", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_sections_by_section_id_edit(section_id: int) -> str:
     """Edit Section.
 
@@ -4602,7 +4602,7 @@ def update_library_sections_by_section_id_edit(section_id: int) -> str:
     return call("PUT", f"/library/sections/{section_id}/edit", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_sections_by_section_id_empty_trash(section_id: int) -> str:
     """Empty section trash.
 
@@ -4614,7 +4614,7 @@ def update_library_sections_by_section_id_empty_trash(section_id: int) -> str:
     return call("PUT", f"/library/sections/{section_id}/emptyTrash", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_sections_by_section_id_move(section_id: int) -> str:
     """Move Section.
 
@@ -4626,7 +4626,7 @@ def update_library_sections_by_section_id_move(section_id: int) -> str:
     return call("PUT", f"/library/sections/{section_id}/move", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_sections_by_section_id_prefs(section_id: int, prefs: dict | None = None) -> str:
     """Set section prefs.
 
@@ -4639,7 +4639,7 @@ def update_library_sections_by_section_id_prefs(section_id: int, prefs: dict | N
     return call("PUT", f"/library/sections/{section_id}/prefs", query={"prefs": prefs}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_library_streams_by_stream_id_ext(stream_id: int, ext: str, offset: int | None = None) -> str:
     """Set a stream offset.
 
@@ -4653,7 +4653,7 @@ def update_library_streams_by_stream_id_ext(stream_id: int, ext: str, offset: in
     return call("PUT", f"/library/streams/{stream_id}.{ext}", query={"offset": offset}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_livetv_dvrs_by_dvr_id(dvr_id: int) -> str:
     """Update DVR Settings.
 
@@ -4665,7 +4665,7 @@ def update_livetv_dvrs_by_dvr_id(dvr_id: int) -> str:
     return call("PUT", f"/livetv/dvrs/{dvr_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_livetv_dvrs_by_dvr_id_devices_by_device_id(dvr_id: int, device_id: int) -> str:
     """Add a device to an existing DVR.
 
@@ -4678,7 +4678,7 @@ def update_livetv_dvrs_by_dvr_id_devices_by_device_id(dvr_id: int, device_id: in
     return call("PUT", f"/livetv/dvrs/{dvr_id}/devices/{device_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_livetv_dvrs_by_dvr_id_lineups(dvr_id: int, lineup: str | None = None) -> str:
     """Add a DVR Lineup.
 
@@ -4691,7 +4691,7 @@ def update_livetv_dvrs_by_dvr_id_lineups(dvr_id: int, lineup: str | None = None)
     return call("PUT", f"/livetv/dvrs/{dvr_id}/lineups", query={"lineup": lineup}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_livetv_dvrs_by_dvr_id_prefs(dvr_id: int, name: str | None = None, value: str | None = None) -> str:
     """Set DVR preferences.
 
@@ -4705,7 +4705,7 @@ def update_livetv_dvrs_by_dvr_id_prefs(dvr_id: int, name: str | None = None, val
     return call("PUT", f"/livetv/dvrs/{dvr_id}/prefs", query={"name": name, "value": value}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_log(level: int | None = None, message: str | None = None, source: str | None = None) -> str:
     """Logging a single-line message to the Plex Media Server log.
 
@@ -4724,7 +4724,7 @@ def update_log(level: int | None = None, message: str | None = None, source: str
     return call("PUT", "/log", query={"level": level, "message": message, "source": source}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_media_grabbers_devices_by_device_id(device_id: int, enabled: str | None = None) -> str:
     """Enable or disable a device.
 
@@ -4737,7 +4737,7 @@ def update_media_grabbers_devices_by_device_id(device_id: int, enabled: str | No
     return call("PUT", f"/media/grabbers/devices/{device_id}", query={"enabled": enabled}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_media_grabbers_devices_by_device_id_channelmap(device_id: int, channel_mapping: dict | None = None, channel_mapping_by_key: dict | None = None, channels_enabled: list | None = None) -> str:
     """Set a device's channel mapping.
 
@@ -4752,7 +4752,7 @@ def update_media_grabbers_devices_by_device_id_channelmap(device_id: int, channe
     return call("PUT", f"/media/grabbers/devices/{device_id}/channelmap", query={"channelMapping": channel_mapping, "channelMappingByKey": channel_mapping_by_key, "channelsEnabled": channels_enabled}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_media_grabbers_devices_by_device_id_prefs(device_id: int, name: str | None = None, value: str | None = None) -> str:
     """Set device preferences.
 
@@ -4766,7 +4766,7 @@ def update_media_grabbers_devices_by_device_id_prefs(device_id: int, name: str |
     return call("PUT", f"/media/grabbers/devices/{device_id}/prefs", query={"name": name, "value": value}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_media_subscriptions_by_subscription_id(subscription_id: int, prefs: dict | None = None) -> str:
     """Edit a subscription.
 
@@ -4779,7 +4779,7 @@ def update_media_subscriptions_by_subscription_id(subscription_id: int, prefs: d
     return call("PUT", f"/media/subscriptions/{subscription_id}", query={"prefs": prefs}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_media_subscriptions_by_subscription_id_move(subscription_id: int, after: int | None = None) -> str:
     """Re-order a subscription.
 
@@ -4792,7 +4792,7 @@ def update_media_subscriptions_by_subscription_id_move(subscription_id: int, aft
     return call("PUT", f"/media/subscriptions/{subscription_id}/move", query={"after": after}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_myplex_refresh_reachability() -> str:
     """Refresh Reachability.
 
@@ -4801,7 +4801,7 @@ def update_myplex_refresh_reachability() -> str:
     return call("PUT", "/myplex/refreshReachability", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_pins_link(body: dict) -> str:
     """Link OAuth PIN.
 
@@ -4813,7 +4813,7 @@ def update_pins_link(body: dict) -> str:
     return call("PUT", "/pins/link", query=None, body=body, form=None, host='https://plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_play_queues_by_play_queue_id(play_queue_id: int, uri: str | None = None, playlist_id: str | None = None, next: str | None = None) -> str:
     """Add a generator or playlist to a play queue.
 
@@ -4828,7 +4828,7 @@ def update_play_queues_by_play_queue_id(play_queue_id: int, uri: str | None = No
     return call("PUT", f"/playQueues/{play_queue_id}", query={"uri": uri, "playlistID": playlist_id, "next": next}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_play_queues_by_play_queue_id_items_by_play_queue_item_id_move(play_queue_id: int, play_queue_item_id: int, after: int | None = None) -> str:
     """Move an item in a play queue.
 
@@ -4842,7 +4842,7 @@ def update_play_queues_by_play_queue_id_items_by_play_queue_item_id_move(play_qu
     return call("PUT", f"/playQueues/{play_queue_id}/items/{play_queue_item_id}/move", query={"after": after}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_play_queues_by_play_queue_id_reset(play_queue_id: int) -> str:
     """Reset a play queue.
 
@@ -4854,7 +4854,7 @@ def update_play_queues_by_play_queue_id_reset(play_queue_id: int) -> str:
     return call("PUT", f"/playQueues/{play_queue_id}/reset", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_play_queues_by_play_queue_id_shuffle(play_queue_id: int) -> str:
     """Shuffle a play queue.
 
@@ -4866,7 +4866,7 @@ def update_play_queues_by_play_queue_id_shuffle(play_queue_id: int) -> str:
     return call("PUT", f"/playQueues/{play_queue_id}/shuffle", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_play_queues_by_play_queue_id_unshuffle(play_queue_id: int) -> str:
     """Unshuffle a play queue.
 
@@ -4878,7 +4878,7 @@ def update_play_queues_by_play_queue_id_unshuffle(play_queue_id: int) -> str:
     return call("PUT", f"/playQueues/{play_queue_id}/unshuffle", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_playlists_by_playlist_id(playlist_id: int) -> str:
     """Editing a Playlist.
 
@@ -4890,7 +4890,7 @@ def update_playlists_by_playlist_id(playlist_id: int) -> str:
     return call("PUT", f"/playlists/{playlist_id}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_playlists_by_playlist_id_items(playlist_id: int, uri: str | None = None, play_queue_id: int | None = None) -> str:
     """Adding to  a Playlist.
 
@@ -4904,7 +4904,7 @@ def update_playlists_by_playlist_id_items(playlist_id: int, uri: str | None = No
     return call("PUT", f"/playlists/{playlist_id}/items", query={"uri": uri, "playQueueID": play_queue_id}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_playlists_by_playlist_id_items_by_generator_id(playlist_id: int, generator_id: int, item: dict | None = None) -> str:
     """Modify a Generator.
 
@@ -4920,7 +4920,7 @@ Item[type]=42&Item[title]=Jack-Jack Attack&Item[target]=&Item[targetTagID]=1&Ite
     return call("PUT", f"/playlists/{playlist_id}/items/{generator_id}", query={"Item": item}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_playlists_by_playlist_id_items_by_generator_id_by_metadata_id_by_action(playlist_id: int, generator_id: int, metadata_id: int, action: str) -> str:
     """Reprocess a generator.
 
@@ -4935,7 +4935,7 @@ def update_playlists_by_playlist_id_items_by_generator_id_by_metadata_id_by_acti
     return call("PUT", f"/playlists/{playlist_id}/items/{generator_id}/{metadata_id}/{action}", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_playlists_by_playlist_id_items_by_playlist_item_id_move(playlist_id: int, playlist_item_id: int, after: int | None = None) -> str:
     """Moving items in a playlist.
 
@@ -4949,7 +4949,7 @@ def update_playlists_by_playlist_id_items_by_playlist_item_id_move(playlist_id: 
     return call("PUT", f"/playlists/{playlist_id}/items/{playlist_item_id}/move", query={"after": after}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_prefs(prefs: dict | None = None) -> str:
     """Set preferences.
 
@@ -4961,7 +4961,7 @@ def update_prefs(prefs: dict | None = None) -> str:
     return call("PUT", "/:/prefs", query={"prefs": prefs}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_rate(identifier: str | None = None, key: str | None = None, rating: float | None = None, rated_at: int | None = None) -> str:
     """Rate an item.
 
@@ -4976,7 +4976,7 @@ def update_rate(identifier: str | None = None, key: str | None = None, rating: f
     return call("PUT", "/:/rate", query={"identifier": identifier, "key": key, "rating": rating, "ratedAt": rated_at}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_scrobble(identifier: str | None = None, key: str | None = None, uri: str | None = None) -> str:
     """Mark an item as played.
 
@@ -4990,7 +4990,7 @@ def update_scrobble(identifier: str | None = None, key: str | None = None, uri: 
     return call("PUT", "/:/scrobble", query={"identifier": identifier, "key": key, "uri": uri}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_sharings_by_user_id(user_id: int) -> str:
     """Update Share.
 
@@ -5002,7 +5002,7 @@ def update_sharings_by_user_id(user_id: int) -> str:
     return call("PUT", f"/sharings/{user_id}", query=None, body=None, form=None, host='https://plex.tv/api/v2')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_sync_refresh_content() -> str:
     """Refresh Sync Content.
 
@@ -5011,7 +5011,7 @@ def update_sync_refresh_content() -> str:
     return call("PUT", "/sync/refreshContent", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_sync_refresh_synclists() -> str:
     """Refresh Sync Lists.
 
@@ -5020,7 +5020,7 @@ def update_sync_refresh_synclists() -> str:
     return call("PUT", "/sync/refreshSynclists", query=None, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_unscrobble(identifier: str | None = None, key: str | None = None, uri: str | None = None) -> str:
     """Mark an item as unplayed.
 
@@ -5034,7 +5034,7 @@ def update_unscrobble(identifier: str | None = None, key: str | None = None, uri
     return call("PUT", "/:/unscrobble", query={"identifier": identifier, "key": key, "uri": uri}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_updater_apply(tonight: str | None = None, skip: str | None = None) -> str:
     """Applying updates.
 
@@ -5047,7 +5047,7 @@ def update_updater_apply(tonight: str | None = None, skip: str | None = None) ->
     return call("PUT", "/updater/apply", query={"tonight": tonight, "skip": skip}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_updater_check(download: str | None = None) -> str:
     """Checking for updates.
 
@@ -5059,7 +5059,7 @@ def update_updater_check(download: str | None = None) -> str:
     return call("PUT", "/updater/check", query={"download": download}, body=None, form=None, host='server')
 
 
-@mcp.tool(annotations=_WRITE)
+@operation(_WRITE)
 def update_user_view_state_sync() -> str:
     """Update View State Sync.
 

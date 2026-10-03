@@ -92,6 +92,6 @@ def test_empty_body_is_success():
 def test_every_tool_registers():
     import asyncio
 
-    from plex_mcp import tools  # noqa: F401 -- registers the tools
+    from plex_mcp import catalog  # noqa: F401 -- registers the tools
 
-    assert len(asyncio.run(runtime.mcp.list_tools())) == 406
+    assert len(asyncio.run(runtime.mcp.list_tools())) == 28

@@ -1,3 +1,9 @@
+### 1.2.0: 2026-10-03
+
+* Expose 25 core tools instead of 405
+* Add find_operation and run_operation for the rest
+* Cut tool definitions from 84 000 to 8 400 tokens
+
 ### 1.1.0: 2026-10-02
 
 * Page results larger than 20 000 tokens

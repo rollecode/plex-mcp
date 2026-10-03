@@ -20,7 +20,7 @@ Plex MCP server
 
 <hr>
 
-Run Plex from Claude.ai and Claude Code. All 405 operations are tools: 353 on your media server and 52 on the plex.tv cloud services, each routed to the right host automatically. Not a curated subset.
+Run Plex from Claude.ai, Claude Desktop and Claude Code. All 405 operations are reachable: 353 on your media server and 52 on the plex.tv cloud services, each routed to the right host automatically. 25 everyday ones are tools of their own; `find_operation` and `run_operation` reach the rest, so the tool list stays about 8 400 tokens.
 
 <hr>
 
@@ -61,7 +61,16 @@ Verb first, derived from the method and path, so the name says what it does:
 | `update_*` | PUT | `update_playlists_by_playlist_id` |
 | `delete_*` | DELETE | `delete_playlists_by_playlist_id` |
 
-405 tools is a lot to put in front of a model at once. If your client supports tool filtering, narrow it to the groups you use.
+## 28 tools, 405 operations
+
+Exposing all 405 operations as tools put about 84 000 tokens of definitions in front of every message, which left Claude Desktop unusable with it switched on. The list is now about 8 400. So the client sees:
+
+* 25 core tools for libraries, search, items, recently added, continue watching, sessions, history, playlists, watched state, ratings, refreshing a section and the watchlist (`CORE` in `src/plex_mcp/catalog.py`)
+* `find_operation`, which searches every operation by words and returns its route, summary and arguments
+* `run_operation`, which runs any operation by name
+* `get_result_page`, which pages answers too large to send at once
+
+The generated functions live in `tools.py` as before; they are recorded as operations and only the core set is registered as tools.
 
 ## Two APIs, one server
 

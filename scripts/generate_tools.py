@@ -50,10 +50,11 @@ Regenerate with:
 
     python scripts/generate_tools.py openapi.json {target}
 
-One tool per operation, {count} of them, covering the whole API.
+One function per operation, {count} of them, covering the whole API. catalog.py
+exposes a core set as tools and runs the rest by name.
 """
 
-from .runtime import _DESTRUCTIVE, _READ, _WRITE, call, mcp
+from .runtime import _DESTRUCTIVE, _READ, _WRITE, call, operation
 
 '''
 
@@ -271,7 +272,7 @@ def render(name: str, method: str, path: str, operation: dict) -> str:
     signature = ", ".join(required_args + args)
     doc = describe(operation, method, path)
 
-    lines = [f"@mcp.tool(annotations={annotation})", f"def {name}({signature}) -> str:"]
+    lines = [f"@operation({annotation})", f"def {name}({signature}) -> str:"]
     lines.append(f'    """{doc}')
     lines.append("")
     lines.append(f"    {method.upper()} {path}")
