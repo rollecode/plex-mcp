@@ -32,8 +32,8 @@ def test_core_tools_are_real_operations():
 
 def test_find_operation_ranks_by_the_words_given():
     found = json.loads(catalog.find_operation("add to watchlist"))["operations"]
-    assert found[0]["name"] == "create_actions_add_to_watchlist"
-    assert "uri" in found[0]["arguments"]
+    assert found[0]["name"] == "update_actions_add_to_watchlist"
+    assert "rating_key" in found[0]["arguments"]
 
 
 def test_run_operation_calls_the_api():
@@ -53,5 +53,5 @@ def test_run_operation_calls_the_api():
 
 def test_run_operation_explains_mistakes():
     assert "find_operation" in json.loads(catalog.run_operation("no_such_thing"))["message"]
-    bad = json.loads(catalog.run_operation("create_actions_add_to_watchlist", {"nope": 1}))
-    assert bad["status"] == "error" and "uri" in bad["message"]
+    bad = json.loads(catalog.run_operation("update_actions_add_to_watchlist", {"nope": 1}))
+    assert bad["status"] == "error" and "rating_key" in bad["message"]

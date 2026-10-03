@@ -36,8 +36,8 @@ CORE = (
     "update_rate",
     "create_library_sections_by_section_id_refresh",
     "list_library_sections_watchlist_all",
-    "create_actions_add_to_watchlist",
-    "create_actions_remove_from_watchlist",
+    "update_actions_add_to_watchlist",
+    "update_actions_remove_from_watchlist",
     "list_identity",
 )
 

@@ -438,17 +438,17 @@
    }
   },
   "/actions/addToWatchlist": {
-   "post": {
+   "put": {
     "summary": "Add to Watchlist",
     "tags": [
      "Provider"
     ],
     "parameters": [
      {
-      "name": "uri",
-      "description": "The URI of the item to add or remove",
+      "name": "ratingKey",
       "in": "query",
       "required": true,
+      "description": "The Discover rating key, the last part of the item's plex:// guid",
       "schema": {
        "type": "string"
       }
@@ -478,17 +478,17 @@
    }
   },
   "/actions/removeFromWatchlist": {
-   "post": {
+   "put": {
     "summary": "Remove from Watchlist",
     "tags": [
      "Provider"
     ],
     "parameters": [
      {
-      "name": "uri",
-      "description": "The URI of the item to add or remove",
+      "name": "ratingKey",
       "in": "query",
       "required": true,
+      "description": "The Discover rating key, the last part of the item's plex:// guid",
       "schema": {
        "type": "string"
       }

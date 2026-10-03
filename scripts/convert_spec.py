@@ -20,6 +20,20 @@ import yaml
 # is an absolute cloud endpoint.
 SERVER_MARKER = "plex.direct"
 
+# Where the community spec disagrees with what plex.tv accepts. Discover rejects
+# POST ?uri= for watchlist edits; python-plexapi sends PUT ?ratingKey=.
+WATCHLIST_PARAMETER = {
+    "name": "ratingKey",
+    "in": "query",
+    "required": True,
+    "description": "The Discover rating key, the last part of the item's plex:// guid",
+    "schema": {"type": "string"},
+}
+CORRECTIONS = {
+    ("/actions/addToWatchlist", "post"): ("put", [WATCHLIST_PARAMETER]),
+    ("/actions/removeFromWatchlist", "post"): ("put", [WATCHLIST_PARAMETER]),
+}
+
 
 def host_of(operation: dict, path_item: dict, spec: dict) -> str:
     servers = operation.get("servers") or path_item.get("servers") or spec.get("servers")
@@ -77,6 +91,9 @@ def main() -> int:
                     "required": operation["requestBody"].get("required", False),
                     "content": {"application/json": {"schema": {"type": "object"}}},
                 }
+            correction = CORRECTIONS.get((path, method))
+            if correction:
+                method, entry["parameters"] = correction
             slim["paths"].setdefault(path, {})[method] = entry
 
     with open(sys.argv[2], "w") as handle:

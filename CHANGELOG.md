@@ -1,3 +1,7 @@
+### 1.2.1: 2026-10-03
+
+* Fix adding to and removing from the watchlist
+
 ### 1.2.0: 2026-10-03
 
 * Expose 25 core tools instead of 405

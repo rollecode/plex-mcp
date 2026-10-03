@@ -11,30 +11,6 @@ exposes a core set as tools and runs the rest by name.
 from .runtime import _DESTRUCTIVE, _READ, _WRITE, call, operation
 
 @operation(_WRITE)
-def create_actions_add_to_watchlist(uri: str | None = None) -> str:
-    """Add to Watchlist.
-
-    POST /actions/addToWatchlist
-
-    Args:
-        uri: The URI of the item to add or remove
-    """
-    return call("POST", "/actions/addToWatchlist", query={"uri": uri}, body=None, form=None, host='https://discover.provider.plex.tv')
-
-
-@operation(_WRITE)
-def create_actions_remove_from_watchlist(uri: str | None = None) -> str:
-    """Remove from Watchlist.
-
-    POST /actions/removeFromWatchlist
-
-    Args:
-        uri: The URI of the item to add or remove
-    """
-    return call("POST", "/actions/removeFromWatchlist", query={"uri": uri}, body=None, form=None, host='https://discover.provider.plex.tv')
-
-
-@operation(_WRITE)
 def create_auth_jwk(body: dict) -> str:
     """Register Device JWK.
 
@@ -4142,6 +4118,18 @@ def patch_livetv_dvrs_by_dvr_id(dvr_id: int) -> str:
 
 
 @operation(_WRITE)
+def update_actions_add_to_watchlist(rating_key: str | None = None) -> str:
+    """Add to Watchlist.
+
+    PUT /actions/addToWatchlist
+
+    Args:
+        rating_key: The Discover rating key, the last part of the item's plex:// guid
+    """
+    return call("PUT", "/actions/addToWatchlist", query={"ratingKey": rating_key}, body=None, form=None, host='https://discover.provider.plex.tv')
+
+
+@operation(_WRITE)
 def update_actions_remove_from_continue_watching(key: str | None = None) -> str:
     """Remove From Continue Watching.
 
@@ -4151,6 +4139,18 @@ def update_actions_remove_from_continue_watching(key: str | None = None) -> str:
         key: The metadata key of the item
     """
     return call("PUT", "/actions/removeFromContinueWatching", query={"key": key}, body=None, form=None, host='server')
+
+
+@operation(_WRITE)
+def update_actions_remove_from_watchlist(rating_key: str | None = None) -> str:
+    """Remove from Watchlist.
+
+    PUT /actions/removeFromWatchlist
+
+    Args:
+        rating_key: The Discover rating key, the last part of the item's plex:// guid
+    """
+    return call("PUT", "/actions/removeFromWatchlist", query={"ratingKey": rating_key}, body=None, form=None, host='https://discover.provider.plex.tv')
 
 
 @operation(_WRITE)
